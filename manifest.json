@@ -1,0 +1,25 @@
+---
+layout: null
+---
+{
+  "short_name": "{{ site.title | replace: '"', '\"' }}",
+  "name": "{{ site.title | replace: '"', '\"' }}",
+  "description": "{{ site.description | replace: '"', '\"' }}",
+  "icons": [
+    {
+      "src": "{{ '/splash-512x512.png' | relative_url }}",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "https://github.com/mgp123.png",
+      "type": "image/png",
+      "sizes": "420x420"
+    }
+  ],
+  "start_url": "{{ '/' | relative_url }}",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "{{ '/' | relative_url }}",
+  "theme_color": "#ffffff"
+}
