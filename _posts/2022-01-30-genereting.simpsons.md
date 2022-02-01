@@ -148,7 +148,7 @@ We started training an autoencoder for this exact propose. We grabbed [this one]
   </figcaption> 
 </figure>
 
-Why did it failed? Probably the network's architecture (specifically the tweaks) were not good. Also a latent representation of 1024 might be to small to represent the whole image with enough accuracy.
+Why did it failed? Probably the network's architecture (specifically the tweaks) were not good. Also a latent representation of 1024 might be too small to represent the whole image with enough accuracy.
 
 ### Footnotes
 
