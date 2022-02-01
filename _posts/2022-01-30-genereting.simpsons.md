@@ -81,12 +81,11 @@ StyleGAN2-ADA can produce very realistic results in datasets such as faces so: W
 
   *In typical cases, 25000 kimg or more is needed to reach convergence, but the results are already quite reasonable around 5000 kimg. 1000 kimg is often enough for transfer learning, which tends to converge significantly faster*
 
-  <!-- there is a plot showing an estimate of 3 GPU days when training on 512x512 images from scratch and using a V100. Our training time is of approximately 4 GPU days but we didn't use a V100 so this is not a valid comparison.  -->
   Considering that it took 4 GPU days to train to 1514 kimg, 25000 kimg is completely out of reach. However we didn't train from scratch, instead resuming training from the ffhq512 model<sup>[2](#transfer-learning)</sup>. As we have said before, we trained the model a bit more but without getting any improvements. It's also true that during training the generator frequently got worse but improved later on, indicating that this is not a good criteria for deciding when to stop. So, does it need more training? I'm inclined to believe that it does *but that it won't make a huge difference anyway*. It might also lead to mode collapse (this was already begining to be a problem).
 
 It's also interesting to see what details the generator picked up. For instance, as we kept too much of the intro, it sometimes tries to imitate the opening credits that appear at the start of an episode (as you can see in one of the samples above). The pink background of some of the generated images is probably due to the pink walls of the house. 
 
-It also learnt to imitate different periods of the show. Look at the following samples. Notice how the first one uses darker colors, has a less sharp outline and two black stripes at the sides.
+It also learned to imitate different periods of the show. Look at the following samples. Notice how the first one uses darker colors, has a less sharp outline and two black stripes at the sides.
 <figure align="center"   display="inline-block">
   <img src="/images/simpsons/samples/homer_old.png"  width=350/>
   <img src="/images/simpsons/samples/homer_new.png"  width=350/>
