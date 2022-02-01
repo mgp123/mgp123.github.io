@@ -332,9 +332,9 @@ $$\sum_{x \in \text{ leaves of } A} 2^{-\text{ depth } x } = 2^{-h}  \cdot 2^h =
 Any shorter tree can be created by iteratively removing leaves from a full tree in the following way:
 
 - removing 2 leaves with the same parent. This changes the sum by $$2^{-(\text{ depth } x - 1)} -2 \cdot 2^{-\text{ depth } x } = 0$$
-- removing a leaf whose parent is of degree 2. This changes the sum by $$-2^{-\text{ depth } x }$$
+- removing a leaf whose parent has no other children. This changes the sum by $$-2^{-\text{ depth } x }$$
 
-As a corollary, if the sum is strictly less than 1 then it must have some node of degree 1.
+As a corollary, if the sum is strictly less than 1 then it must have some node with a single child.
 
 
 
@@ -349,7 +349,7 @@ We are looking for a code that uses lengths $$l_1..l_n$$. As a consequence, the 
 
 A proof by induction in $$n$$. Without loss of generality let's assume that  $$l_1..l_n$$ is sorted.
 
- If there's a tree $$A$$ for $$l_1..l_{n-1}$$ then it must have a node of degree 1 since $$\sum_{l}^n 2^{-l} \leq 1 \rightarrow \sum_{l}^{n-1} 2^{-l}  < 1$$. Also, this internal node must have depth less than $$l_n$$ otherwise there would be a leaf with depth bigger than $$l_n$$. We can extend this node with a simple path until we reach $$l_n$$. This becomes a tree for $$l_1..l_{n}$$ and we are done. The initial case is when we only have a single $$l$$ which corresponds to a simple path of length $$l$$ 
+ If there's a tree $$A$$ for $$l_1..l_{n-1}$$ then it must have a node with a single child since $$\sum_{l}^n 2^{-l} \leq 1 \rightarrow \sum_{l}^{n-1} 2^{-l}  < 1$$. Also, this internal node must have depth less than $$l_n$$ otherwise there would be a leaf with depth bigger than $$l_n$$. We can extend this node with a simple path until we reach $$l_n$$. This becomes a tree for $$l_1..l_{n}$$ and we are done. The initial case is when we only have a single $$l$$ which corresponds to a simple path of length $$l$$ 
 
 <div align="center" class="row">
   <div class="column" style="display: inline-block;" >
@@ -368,7 +368,7 @@ This process can also be written in pseudocode. Given a sorted list of ints `ls`
   }
   <span style="color: #008000; font-weight: bold">else</span> {
     Tree recursiveTree <span style="color: #666666">=</span> codetree(ls[<span style="color: #666666">0.</span>.n<span style="color: #666666">-2</span>]);
-    Node extendable <span style="color: #666666">=</span> any node in recursiveTree of degree <span style="color: #666666">1</span>;
+    Node extendable <span style="color: #666666">=</span> any node in recursiveTree with a single child <span style="color: #666666">1</span>;
 
     <span style="color: #B00040">int</span> pathLength <span style="color: #666666">=</span> ls[n<span style="color: #666666">-1</span>] <span style="color: #666666">-</span> extendable.depth();
     extendable.add(SimplePath(pathLength));
