@@ -332,7 +332,7 @@ $$\sum_{x \in \text{ leaves of } A} 2^{-\text{ depth } x } = 2^{-h}  \cdot 2^h =
 Any shorter tree can be created by iteratively removing leaves from a full tree in the following way:
 
 - removing 2 leaves with the same parent. This changes the sum by $$2^{-(\text{ depth } x - 1)} -2 \cdot 2^{-\text{ depth } x } = 0$$
-- removing a leaf whose parent has no other children. This changes the sum by $$-2^{-\text{ depth } x }$$
+- removing a leaf whose parent has another child. This changes the sum by $$-2^{-\text{ depth } x }$$
 
 As a corollary, if the sum is strictly less than 1 then it must have some node with a single child.
 
