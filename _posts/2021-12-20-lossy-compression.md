@@ -74,7 +74,7 @@ Well, how do we cluster? There's a long list of clustering algorithms to choose 
 <figure align="center">
   <img src="/images/lossy-compression/charly.png"/>
   <figcaption style="font-size:0.8em;"> 
-    Entropys from left to right: 12.0, 11.8, 5.0, 3.5.
+    Entropies from left to right: 12.0, 11.8, 5.0, 3.5.
    </figcaption>
 </figure>
 
