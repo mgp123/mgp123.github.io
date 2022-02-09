@@ -132,7 +132,7 @@ Lastly here is a fun interpolation video <sup>[3](#video-generator)</sup>
 Generating frames is fun but what we truly want is to generate episodes. This would give us an infinite episode creator. You just run the program and get an episode with sound and everything. While that would be really interesting, that program is currently sitting quite comfortably in the science fiction realm. The technology is just not there yet.
  
 
-Here is an idea that for generating videos, not whole episodes, only short videos with a little bit of movement and no sound. First we train an autoencoder on frames so that have to get a low dimensional representation. Then we split the episodes into continuous shots. With the trained autoencoder, we encode each frame of the sequence with it. This will be used as training data fed into some model for sequence generation.
+Here is an idea that for generating videos, not whole episodes, only short videos with a little bit of movement and no sound. First we train an autoencoder on frames so that we get a low dimensional representation. Then we split the episodes into continuous shots. With the trained autoencoder, we encode each frame of the sequence with it. This will be used as training data fed into some model for sequence generation.
 
 It's so simple that someone must have thought of it already. Is it going to work? Probably not.
 
