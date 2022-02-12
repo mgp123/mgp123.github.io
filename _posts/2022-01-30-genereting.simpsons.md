@@ -9,7 +9,7 @@ summary:    Using StyleGAN2-ADA to generate images from The Simpsons (with low q
 ----
 ### Introduction
 
-The Simpsons has been around for a really long time. The show started airing at the start of the 90s and more than 30 years has passed since its premiere. At the time of writing there are about 700 episodes. Asumming 24 frames per second and 20 minutes per episodes, thats *20 millions frames* <sup>[1](#framesfootnote)</sup>. This is more than enough for a reasonable dataset. 
+The Simpsons have been around for a really long time. The show started airing at the start of the 90s and more than 30 years has passed since its premiere. At the time of writing there are about 700 episodes. Asumming 24 frames per second and 20 minutes per episodes, thats *20 millions frames* <sup>[1](#framesfootnote)</sup>. This is more than enough for a reasonable dataset. 
 
 In the machine learning front, deep learning methods are becoming very good at generating images according to some given distribution. They are still far from perfect but gradual improvements are made every year. We try to train StyleGAN2-ADA using frames from Simpsons episodes.
 
