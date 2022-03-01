@@ -2,6 +2,8 @@
 layout:     post
 title:      Information Theory Notes
 date:       2021-10-05
+update_date:  2022-03-01
+update_summary: Added section on KL-divergence
 mermaid: true
 summary:    A brief recap of the main results of communication in noiseless channels based on my notes.
 header-includes: 
@@ -272,7 +274,7 @@ So is not dependant on $$n$$. Which is kind of obvious when you think about it. 
 
 Also, using uniquely decodable codes is somewhat more realistic. As a transmitter you would like to start sending whatever new symbol has just arrived. You shouldn't have to wait for the input stream to end so that you can figure out what binary string to put into the channel. Maybe you have no way of knowing when the stream ends, if it ends at all.  This type of codes lets you do that, you don't have to remember what you have seen or know what will come next. This coding is, in a sense, instantaneous for the transmitter, you encode the symbol and send it and that's it. The same thing cannot be said about the receiver, it may require seeing a very large string ahead just to make sure what symbol to decode. If we want the coding to also be instantaneous for the receiver, we want what are called *prefix codes*. We'll talk more about prefix codes later.
 
-Before going any further, a very interesting question arises. Are uniquely decodable codes really enough? Or is it that we can get a more efficient code *when we do know* the $$n$$ distribution ahead of time? As we'll proove later, this kind of codes can't go below entropy so, at least for the specific case of fixed $$n$$, you may actually be more efficient than this. 
+Before going any further, a very interesting question arises. Are uniquely decodable codes really enough? Or is it that we can get a more efficient code *when we do know* the $$n$$ distribution ahead of time? As we'll prove later, this kind of codes can't go below entropy so, at least for the specific case of fixed $$n$$, you may actually be more efficient than this. 
 
 
 Anyway, getting back on track. How efficient can we get with uniquely decodable codes? The following 2 properties help a lot in trying to bound an optimal encoding.
@@ -437,6 +439,143 @@ So even when restricting to uniquely decodable codes we are still very close to 
 How about lumping together various $$X$$s and using a uniquely decodable code for that? This just ends up as replacing the $$H(X)+1$$ by $$H(X)+\frac{1}{n}$$ . So with this trick we can get as close to the entropy as we want (although now transmitter and receiver need to wait for entire blocks in order to encode/decode). 
 
 
+### KL-divergence
+
+Now we are going to try to relate different distributions and how it affects the encoding. Let's say that we are trying to encode symbols from $$X$$ with distribution given by $$p$$ but we are working under the incorrect assumption that the distribution is really $$q$$. How bad is this? 
+
+First, we should take for granted that any possible symbol that may appear under $$p$$ also appears under $$q$$ (otherwise the encoding we got from $$q$$ wouldn't have a code for those symbols). This is equivalent to $$p_i \neq 0 \rightarrow q_i \neq 0 $$. As we are assuming that each symbol we are trying to encode has some chance of happening under $$p$$, this simplifies to $$q_i \neq 0$$ <sup>[4](#q-sum-one)</sup>. 
+
+If we encode symbol $$i$$ using  $$- \lfloor \log q_i \rfloor$$ bits we end up using
+
+$$ \text{bits used} = \sum_i p_i  \cdot -\lfloor \log q_i \rfloor $$
+
+
+which we can bound by
+
+$$\sum_i p_i  \cdot -\log q_i \leq \text{bits used} \leq 1 + \sum_i p_i  \cdot -\log q_i$$
+
+We define the *Kullback–Leibler divergence* (KL-divergence) as 
+
+$$ D_{KL}(p\| q) = \sum_i p_i  \cdot -\log \frac{q_i}{p_i}$$
+
+It's easy to see that:
+$$\sum_i p_i  \cdot -\log q_i = H(X) + D_{KL}(p\| q)  $$
+
+Therefore, $$D_{KL}(p \| q)$$ estimates how many extra bits above entropy we need on average with this encoding (plus a possible extra bit). A small divergence means that, while not optimal, it's a good enough encoding.
+
+KL-divergence can also be interpreted as a sort of measure of how similar is the $$q$$ distribution to the $$p$$ distribution (although it's not symmetric). Intuitively, the KL-divergence becomes large when you are sampling from $$p$$ and observe events that are much more likely to happen under $$p$$ than $$q$$.
+ 
+Ok, but suppose we have a small KL-divergence between $$p$$ and $$q$$. A natural thing to ask is: Why does that mean that the distributions are similar? 
+
+Let's imagine that you take $$n$$ samples following the $$p$$ distribution (for a large $$n$$). As you are taking a large amount of samples, most results are going to be in the typical set and thus the distribution is going to be nearly uniform with most outcomes being around $$2^{-n \cdot H(X)}$$ likely to happen.
+But what if you believe that the distribution really was $$q$$? The result is that, after sampling, you compute how likely the result you just saw should be under $$q$$ and get $$2^{-n \cdot (H(X) + D_{KL}(p\| q))  } $$. You end up believing that your outcome is more unlikely than it truly is. If the difference is large enough then that's a good hint that $$q$$ is probably not the right distribution. On the other hand, when the KL-divergence is small you need to take a bigger $$n$$ before this effect makes a significant difference.  In other words, unless you take a bigger $$n$$, $$q$$ will assign nearly the same probability to the outcomes as $$p$$ does. Because of this, it's harder to notice that $$q$$ is not the real distribution.
+
+
+Another property that helps the intuition behind the KL-divergence is that it can be used to bound the L1-distance between $$p$$ and $$q$$. 
+
+More formally, assuming $$p(x) \neq 0 \rightarrow q(x) \neq 0 $$, we have that
+
+$$\sum | p_i - q_i | \leq \sqrt{ \ln 2 \cdot 2 \cdot D_{KL}(p\| q)} $$ 
+
+
+<ins>Proof of inequality </ins>
+
+The proof involves using a couple of inequalities. Let's define $$\phi(x)$$
+
+$$ \phi(x) = 
+  \begin{cases} 
+   x\cdot \ln x -x + 1& \text{if } x > 0 \\
+   1       & \text{if } x = 0
+  \end{cases}$$
+
+and note that $$\frac{d\phi}{dx} = \ln x$$, $$\frac{d^2\phi}{dx^2} = \frac{1}{x}$$
+
+First we prove that $$\phi(x) \geq 0$$ by expanding $$\phi$$ using a first-order Taylor polynomial centered at $$x=1$$. Because $$\phi(1) = \frac{d\phi}{dx}(1) = 0$$, we end up only with the remainder. That is, for some $$\xi_x$$ between $$1$$ and $$x$$ we have that:
+
+
+$$\phi(x) = \frac{1}{\xi_x} \cdot \frac{1}{2} \cdot (x-1)^2 \geq 0$$ 
+
+
+Now we are going to show the following inequality
+
+$$(x-1)^2  \leq \left(\frac{4}{3} + \frac{2}{3} \cdot x\right) \cdot \phi(x)$$
+
+To do this, we use $$g(x)$$ to represent their difference
+
+$$g(x) = \left(\frac{4}{3} + \frac{2}{3} \cdot x\right) \cdot \phi(x) - (x-1)^2 $$
+
+Similarly, to prove that $$g(x)\geq 0$$, we expand $$g(x)$$ using a first-order Taylor polynomial centered at $$x=1$$
+
+$$ g(x) = g(1) + 	\frac{dg}{dx}(1) \cdot (x-1) + \frac{d^2g}{dx^2}(\xi_x) \cdot \frac{1}{2} \cdot (x-1)^2 $$
+
+It's easy to see that $$g(1) = 0$$. 
+
+For the first derivate we get:
+
+$$\frac{dg}{dx} = \frac{2}{3} \cdot \phi(x) + \left(\frac{4}{3} + \frac{2}{3} \cdot x\right)\frac{d\phi}{dx}(x) - 2 \cdot (x-1)$$
+
+so $$\frac{dg}{dx}(1) = 0$$
+
+For the second derivate we get:
+
+$$\frac{d^2g}{dx^2} = \frac{4}{3} \cdot \frac{d\phi}{dx}(x) +  \left(\frac{4}{3} + \frac{2}{3} \cdot x\right)\cdot \frac{d^2\phi}{dx^2}(x) -  2 
+$$
+
+$$ =  \frac{4}{3} \left( \ln x + \frac{1}{x} - 1\right)  = \frac{4}{3} \frac{\phi(x)}{x}  $$
+
+so $$\frac{d^2g}{dx^2} \geq 0$$
+
+
+Putting it all together we end up with
+
+$$ g(x) = \frac{d^2g}{dx^2}(\xi_x) \cdot \frac{1}{2} \cdot (x-1)^2 \geq 0 $$
+
+which is what we wanted to prove. Now, if we take the square root from both sides of the inequality we just proved we get
+
+
+$$|x-1|  \leq \sqrt{\left(\frac{4}{3} + \frac{2}{3} \cdot x\right) \cdot \phi(x)}$$
+
+
+Using this, we prove the KL-divergence bound
+
+$$ \sum |p_i-q_i| = \sum_{q_i>0} |p_i-q_i| = \sum_{q_i>0} \left| \frac{p_i}{q_i}-1 \right| \cdot q_i$$
+
+$$ \leq \sum_{q_i>0} \sqrt{\left(\frac{4}{3} + \frac{2  p_i}{3 q_i} 
+\right) \cdot \phi \left(\frac{p_i}{q_i}
+\right)} \cdot q_i$$
+
+
+$$ \leq  \sqrt{\sum_{q_i>0} \frac{4}{3} + \frac{2  p_i}{3 q_i} 
+ \cdot q_i }  \cdot \sqrt{\sum_{q_i>0} \phi \left(\frac{p_i}{q_i}
+\right)
+\cdot q_i } $$
+
+
+$$ = \sqrt{2} \cdot \sqrt{\sum_{q_i>0} \phi \left(\frac{p_i}{q_i}
+\right)
+\cdot q_i } $$
+
+$$ = \sqrt{2} \cdot \sqrt{\sum_{q_i>0,p_i>0} \phi \left(\frac{p_i}{q_i}
+\right)
+\cdot q_i + \sum_{q_i>0,p_i=0} q_i } $$
+
+$$ = \sqrt{2} \cdot \sqrt{\sum_{q_i>0,p_i>0} p_i \cdot \ln \frac{p_i}{q_i} - p_i + q_i + \sum_{q_i>0,p_i=0} q_i } $$
+
+$$ = \sqrt{\ln 2 \cdot 2 \cdot D_{KL}(p\| q) } $$
+
+
+<ins>A short note on continuous distributions </ins>
+
+The previous proof also works for continuous distributions under similar assumptions for $$p$$ and $$q$$. Changing the sum for an integral does the trick.
+
+
+<ins>Cross-entropy</ins>
+
+The quantity $$\sum_i p_i  \cdot -\log q_i $$ is called the *cross-entropy* of $$q$$ relative to $$p$$. It has the advantage that it can be estimated without knowing $$p$$ beforehand. You just need to sample from the $$p$$ distribution and (assuming you do know $$q$$) you can compute an estimate of the expected value $$\mathbb{E}[- \log q]$$. 
+
+As an example, suppose we have a fixed but unknown distribution $$p$$ and a parametrized distribution $$q_\theta$$ that we are using to approximate $$p$$. We could try to choose $$\theta$$ to minimize the cross-entropy. Like the KL-divergence and the cross-entropy only differ by the entropy given by $$p$$ (which acts as a constant) minimizing one is minimizing the other.
+
+
 ### Conditional entropy
 
 Thinking things in term of entropy is really powerful. We define *conditional entropy* 
@@ -478,11 +617,13 @@ But suppose that we are in the situation that $$Y=y$$. This means that the distr
  
 Each $$y$$ specific code is not constrained by any of the other codes so we should take the $$y$$-optimal every time! We would need  $$ \mathbb{E} [H(X \vert Y=y)]={H(X \vert Y)}$$ bits.
 
-This is also an informal proof that $$H(X\vert Y) \leq H(X)$$ <sup>[4](#conditional-entropy-is-lower)</sup>. The difference between both values is called *mutual information*
+This is also an informal proof that $$H(X\vert Y) \leq H(X)$$ <sup>[5](#conditional-entropy-is-lower)</sup>. The difference between both values is called *mutual information*
 
 $$I(X,Y) = H(X) - H(X|Y) $$
 
 Thus $$I(X,Y)\geq 0$$, knowledge doesn't hurt. You reduce uncertainty after knowing $$Y$$ (on average).
+
+
 
 
 ### Footnotes
@@ -504,14 +645,16 @@ No matter how close to the expected value you want the average to be ($$\epsilon
 <a name="optimal-may-not-exist">3</a>: If the optimal encoding exists at all! In this situation as the sequence is infinite, it may very well be that you can always find a slightly better one so the minimun is never reached.
 
 
-<a name="conditional-entropy-is-lower">4</a>: Doing it formally is not hard but it involves talking about other stuff. Also this informal proof is one of those things that are not in Cover and Thomas. It just ocurred to me and it seemed such a nice and elegant way to do it. It's possible that this trick is flawed in some subtle way I don't see.
+<a name="q-sum-one">4</a>: Note that we don't need to restrict ourselves to $$ \sum_i q_i = 1 $$. That is, $$q$$ can have some extra symbols in its distribution besides those that also happen under $$p$$. 
 
+<a name="conditional-entropy-is-lower">5</a>: Doing it formally is not hard but it involves talking about other stuff. Also this informal proof is one of those things that are not in Cover and Thomas. It just ocurred to me and it seemed such a nice and elegant way to do it. It's possible that this trick is flawed in some subtle way I don't see.
 
 ### References
 
 - *Thomas M. Cover and Joy A. Thomas. 2006. Elements of Information Theory*. Specifically the first few chapters.
 -  David MacKay lecture series: *Information Theory, Pattern Recognition, and Neural Networks*. Also the first few lectures, available on [youtube](https://www.youtube.com/playlist?list=PLruBu5BI5n4aFpG32iMbdWoRVAA-Vcso6). They are really fun and easy to follow (although not as formal).
 - *Alfred V. Aho and Jeffrey D. Ullman. 1972. The theory of parsing, translation, and compiling*. This is for the short section on context free grammars. I haven't searched for references connecting context free grammars with encoding but someone must have thought of it already.
+- *Alexandre B. Tsybakov. 2008. Introduction to Nonparametric Estimation*. The proof for the KL-divergence bound on the L1-distance was taken almost verbatim from chapter 2.
 
 Any content not in those references is *more likely to be wrong*  as I have reasoned it myself. Hopefully everything is correct but and I am not an expert. That being said...
 
