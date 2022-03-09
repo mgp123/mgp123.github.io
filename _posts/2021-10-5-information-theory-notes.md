@@ -15,7 +15,7 @@ header-includes:
 ----
 
 ### Transmitting a random sequence
-Imagine a random event $$X$$ which can result in any of $$k$$ different outcomes such as a coin flip or a dice roll. Suppose we have a large sequence of samples $$X_1, X_2, X_3...$$ following this distribution $$p(x)$$. We are tasked with transmiting the results across a channel which can only send 0s and 1s.  Crucially, we are not restricted in *how* to transmit the results as long as the receiver can recover them without getting extra information specific to the sequence from somewhere else (otherwise we haven't really transmitted everything). So what we want is to establish a protocol between transmitter and receiver about how to communicate using the channel.
+Imagine a random event $$X$$ which can result in any of $$k$$ different outcomes such as a coin flip or a dice roll. Suppose we have a large sequence of samples $$X_1, X_2, X_3...$$ following this distribution $$p(x)$$. We are tasked with transmitting the results across a channel which can only send 0s and 1s.  Crucially, we are not restricted in *how* to transmit the results as long as the receiver can recover them without getting extra information specific to the sequence from somewhere else (otherwise we haven't really transmitted everything). So what we want is to establish a protocol between transmitter and receiver about how to communicate using the channel.
 
 This process can be drawn into something like this
 <div class="mermaid" style="text-align: center;">
@@ -115,7 +115,7 @@ As boths encodings may use the same amount of bits we also need to append an ext
 $$\frac{2}{n} + P(X_1,..X_n \not\in A_\epsilon^n) \cdot  \log  k  + P(X_1,..X_n \in A_\epsilon^n) \cdot  (H(X)+\epsilon)$$
 
 
-The first and second term go to zero as $$n$$ goes to infinity and the probabilty of being in the typical set is bounded by 1 (duh). Grouping things together we get that for this encoding:
+The first and second term go to zero as $$n$$ goes to infinity and the probability of being in the typical set is bounded by 1 (duh). Grouping things together we get that for this encoding:
 
 $$\frac{1}{n} \cdot \mathbb{E}[ \text{length } C(X_1..X_n)] \leq  (H(X)+\epsilon^\prime)$$
 
@@ -145,7 +145,7 @@ There are $$k$$ possible sequences. Each one needs to map to a different binary 
 
 $$p(i) < p(j), l_1<l_2 \rightarrow  p(i)\cdot l_2 +p(j)\cdot l_1 < p(i)\cdot l_1 +p(j)\cdot l_2$$
 
-In other words, if an encoding gives a shorter codeword to a rare symbol and a long codeword to a more common one, then you could get a better encoding by fliping both codewords. 
+In other words, if an encoding gives a shorter codeword to a rare symbol and a long codeword to a more common one, then you could get a better encoding by flipping both codewords. 
 
 As a consequence, the optimal encoding should give $$0$$ and $$1$$ to the two most likely symbols, $$00, 01,10,11$$ to the next four and so on. To calculate the efficiency, take $$p_1..p_k$$ to be the probabilities sorted in decreasing order. The optimal coding length $$L^*(p)$$ for our distribution $$p$$ is:
 
@@ -171,7 +171,7 @@ $$\bar{L}(p)- H(X) - 1 \leq  L^*(p) -  H(X) $$
 
 So getting a good lower bound for $$ L^*(p) -  H(X)$$ is getting a lower bound on how many extra bits above entropy you would need even with optimal encoding.
 
-Looking at the $$\bar{L}(p)- H(X)$$ part, we can take at the minimun across all $$p$$ . It's possible to solve this using lagrange multipliers (i.e checking the gradient in the region is either zero or only pushing outside the boundary)
+Looking at the $$\bar{L}(p)- H(X)$$ part, we can take at the minimum across all $$p$$ . It's possible to solve this using lagrange multipliers (i.e checking the gradient in the region is either zero or only pushing outside the boundary)
 
 $$\mathcal{L} = \bar{L}(p) - H(X) + \lambda \cdot \sum p_i$$
 
@@ -223,7 +223,7 @@ $$= \mathbb{E}[-\log p(Z_1)] + \mathbb{E}[-\log p(Z_2)]$$
 
 $$= H(Z_1) + H(Z_2)$$
 
-Hence $$H(W) = n \cdot H(X)$$ and the bits per symbol used with fixed $$n$$ is bounded by
+Hence, $$H(W) = n \cdot H(X)$$ and the bits per symbol used with fixed $$n$$ is bounded by
 
 $$H(X) - \frac{\log \ln  k -2 -\log n}{n} \leq L_n^*(p)$$
 
@@ -270,7 +270,7 @@ Using the extension of a uniquely decodable code on the bits per symbol equation
 
 $$   \mathbb{E}[\frac{1}{n} \cdot \text{length}(C^{*}(X_1..X_n))]  = \mathbb{E}[\frac{1}{n} \cdot \sum_i\text{length } C(X_i)] =  \mathbb{E}[\text{length }C(X)]$$
 
-So is not dependant on $$n$$. Which is kind of obvious when you think about it. You are only concatenating the resulting strings. As a consequence, in the following we will be restricting ourselves to encoding using uniquely decodable codes as their performance doesn't depend on an $$n$$ distribution. 
+So is not dependent on $$n$$. Which is kind of obvious when you think about it. You are only concatenating the resulting strings. As a consequence, in the following we will be restricting ourselves to encoding using uniquely decodable codes as their performance doesn't depend on an $$n$$ distribution. 
 
 Also, using uniquely decodable codes is somewhat more realistic. As a transmitter you would like to start sending whatever new symbol has just arrived. You shouldn't have to wait for the input stream to end so that you can figure out what binary string to put into the channel. Maybe you have no way of knowing when the stream ends, if it ends at all.  This type of codes lets you do that, you don't have to remember what you have seen or know what will come next. This coding is, in a sense, instantaneous for the transmitter, you encode the symbol and send it and that's it. The same thing cannot be said about the receiver, it may require seeing a very large string ahead just to make sure what symbol to decode. If we want the coding to also be instantaneous for the receiver, we want what are called *prefix codes*. We'll talk more about prefix codes later.
 
@@ -303,7 +303,7 @@ Notice that the exponents are all the ways of adding the code lengths of $$n$$ a
 
 $$= \sum_{m = 1}^{n \cdot \max C(x)} a(m) \cdot  2^{-m}$$
 
-where $$a(m)$$ is the number of sequences whose coding has combined length $$m$$ and $$\max C(x)$$ refers to the maximun coded length of a single symbol.
+where $$a(m)$$ is the number of sequences whose coding has combined length $$m$$ and $$\max C(x)$$ refers to the maximum coded length of a single symbol.
 
 How large can $$a(m)$$ be? Well, there are $$2^m$$ different binary strings of length $$m$$. If it were true that $$a(m)$$ is greater than $$2^m$$ then we should be able to find 2 sequences such that $$C^*(y_1..y_n) = C^*(z_1..z_n)$$. As $$C$$ is uniquely decodable, this can't be the case. Thus it must be true that $$a(m) \leq 2^m$$. By this bound we get
 
@@ -340,7 +340,7 @@ As a corollary, if the sum is strictly less than 1 then it must have some node w
 
 
 
-The reason for talking about binary trees is that we'll develop a code that uses lengths $$l_1..l_n$$ by constructing one. The way to interpret a tree as an encoding is that branching represents an addition of 1 bit linked to the direction we turn. The codewords are the leaves of the tree, each codewrod being the sequence of decisions taken to reach that particular leaf. 
+The reason for talking about binary trees is that we'll develop a code that uses lengths $$l_1..l_n$$ by constructing one. The way to interpret a tree as an encoding is that branching represents an addition of 1 bit linked to the direction we turn. The codewords are the leaves of the tree, each codeword being the sequence of decisions taken to reach that particular leaf. 
 <figure align="center">
   <img src="/images/information-theory/before_code.svg"   width="400"/>
   <figcaption style="font-size:0.8em;"> Example code using a binary tree </figcaption>
@@ -384,12 +384,12 @@ This process can also be written in pseudocode. Given a sorted list of ints `ls`
 <br/>
 
 
-Ok, we can construct a code but is it uniquely decodable? We need to check this. Notice however that with binary trees no codeword is prefix of another codeword. In the next section we briefly discuss this kind of codes. 
+Ok, we can construct a code but is it uniquely decodable? We need to check this. Notice however that with binary trees no codeword is a prefix of another codeword. In the next section we briefly discuss this kind of codes. 
 
 
 ### Prefix codes
 
-Prefix codes are (against what the name implies) codes where no codeword is prefix of another codeword. 
+Prefix codes are (against what the name implies) codes where no codeword is a prefix of another codeword. 
 
 Let $$C$$ be a coding that we'd like to extend to $$C^*$$. Imagine the following context-free grammar $$G$$ generating all binary strings of $$C^*$$:
 
@@ -642,7 +642,7 @@ $$ P(|\frac{1}{n} \cdot \underset{i}{\sum} X_i - \mathbb{E}[X]| > \epsilon_1) < 
 
 No matter how close to the expected value you want the average to be ($$\epsilon_1$$) and how likely you want the average to be this close ($$\epsilon_2$$) there is an $$n_0$$ such that for $$n>n_0$$ you can guarantee both conditions.
 
-<a name="optimal-may-not-exist">3</a>: If the optimal encoding exists at all! In this situation as the sequence is infinite, it may very well be that you can always find a slightly better one so the minimun is never reached.
+<a name="optimal-may-not-exist">3</a>: If the optimal encoding exists at all! In this situation as the sequence is infinite, it may very well be that you can always find a slightly better one so the minimum is never reached.
 
 
 <a name="q-sum-one">4</a>: Note that we don't need to restrict ourselves to $$ \sum_i q_i = 1 $$. That is, $$q$$ can have some extra symbols in its distribution besides those that also happen under $$p$$. 

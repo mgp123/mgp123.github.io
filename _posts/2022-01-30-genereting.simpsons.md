@@ -9,7 +9,7 @@ summary:    Using StyleGAN2-ADA to generate images from The Simpsons (with low q
 ----
 ### Introduction
 
-The Simpsons have been around for a really long time. The show started airing at the start of the 90s and more than 30 years has passed since its premiere. At the time of writing there are about 700 episodes. Asumming 24 frames per second and 20 minutes per episodes, thats *20 millions frames* <sup>[1](#framesfootnote)</sup>. This is more than enough for a reasonable dataset. 
+The Simpsons have been around for a really long time. The show started airing at the start of the 90s and more than 30 years has passed since its premiere. At the time of writing there are about 700 episodes. Assuming 24 frames per second and 20 minutes per episodes, that's *20 millions frames* <sup>[1](#framesfootnote)</sup>. This is more than enough for a reasonable dataset. 
 
 In the machine learning front, deep learning methods are becoming very good at generating images according to some given distribution. They are still far from perfect but gradual improvements are made every year. We try to train StyleGAN2-ADA using frames from Simpsons episodes.
 
@@ -39,7 +39,7 @@ On top of that, the input dimensions for the network are 512x512 squares so we n
 </figure>
 This gave us more "usable image" per input. That is, a smaller fraction of the images are going to be the zero-padding instead of something useful. However, after some training iterations we went back to center cropping. We feared that the "non-locality" may somehow hurt the learning.
 
-Lastly, as the training is done in google colab, the dataset needs to be relatively small so as not to take all the drive space.  We don't need every frame from every episode. A subset of episodes and an small samplerate is enough. Our final dataset is made up of 28k images (56k with mirroring).
+Lastly, as the training is done in google colab, the dataset needs to be relatively small so as not to take all the drive space.  We don't need every frame from every episode. A subset of episodes and a small samplerate is enough. Our final dataset is made up of 28k images (56k with mirroring).
 
 ### Sampling the generator
 The first result is that training a large model in google colab is a *really bad idea*. It took *four months* of intermittent running just to reach 10% of the final training time. After a while we stopped using colab and switched to a different option. In the end, we trained the model for around 1514 kimg. Quality got worse near the end so we decided to keep an earlier model as the final version.
@@ -81,7 +81,7 @@ StyleGAN2-ADA can produce very realistic results in datasets such as faces so: W
 
   *In typical cases, 25000 kimg or more is needed to reach convergence, but the results are already quite reasonable around 5000 kimg. 1000 kimg is often enough for transfer learning, which tends to converge significantly faster*
 
-  Considering that it took 4 GPU days to train to 1514 kimg, 25000 kimg is completely out of reach. However we didn't train from scratch, instead resuming training from the ffhq512 model<sup>[2](#transfer-learning)</sup>. As we have said before, we trained the model a bit more but without getting any improvements. It's also true that during training the generator frequently got worse but improved later on, indicating that this is not a good criteria for deciding when to stop. So, does it need more training? I'm inclined to believe that it does *but that it won't make a huge difference anyway*. It might also lead to mode collapse (this was already begining to be a problem).
+  Considering that it took 4 GPU days to train to 1514 kimg, 25000 kimg is completely out of reach. However, we didn't train from scratch, instead resuming training from the ffhq512 model<sup>[2](#transfer-learning)</sup>. As we have said before, we trained the model a bit more but without getting any improvements. It's also true that during training the generator frequently got worse but improved later on, indicating that this is not a good criterion for deciding when to stop. So, does it need more training? I'm inclined to believe that it does *but that it won't make a huge difference anyway*. It might also lead to mode collapse (this was already beginning to be a problem).
 
 It's also interesting to see what details the generator picked up. For instance, as we kept too much of the intro, it sometimes tries to imitate the opening credits that appear at the start of an episode (as you can see in one of the samples above). The pink background of some of the generated images is probably due to the pink walls of the house. 
 
@@ -147,13 +147,13 @@ We started training an autoencoder for this exact propose. We grabbed [this one]
   </figcaption> 
 </figure>
 
-Why did it failed? Probably the network's architecture (specifically the tweaks) were not good. Also a latent representation of 1024 might be too small to represent the whole image with enough accuracy.
+Why did it fail? Probably the network's architecture (specifically the tweaks) were not good. Also a latent representation of 1024 might be too small to represent the whole image with enough accuracy.
 
 ### Footnotes
 
 <a name="framesfootnote">1</a>: This is a bit of an oversimplification. Episodes might be shorter or using a different framerate. Also credits or black frames do not count.
 
-<a name="transfer-learning">2</a>: How much did transfer learning help considering that the datasets are so different?
+<a name="transfer-learning">2</a>: How much did transfer learning help, considering that the datasets are so different?
 
 <a name="video-generator">3</a>: Created using script from [dvschultz](https://github.com/dvschultz/stylegan2-ada-pytorch)
 
@@ -161,4 +161,4 @@ Why did it failed? Probably the network's architecture (specifically the tweaks)
 
 - [StyleGAN2-ADA — Official PyTorch implementation](https://github.com/NVlabs/stylegan2-ada-pytorch)
 - [Making Anime Faces With StyleGAN](https://www.gwern.net/Faces). 
-  This post is filled with discussions, tricks and just interesting things in general. I wish I had seen it before I started training. It even recomends not using colab.
+  This post is filled with discussions, tricks and just interesting things in general. I wish I had seen it before I started training. It even recommends not using colab.

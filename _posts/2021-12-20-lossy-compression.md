@@ -11,9 +11,9 @@ summary: Trying to implement some basic algorithms for lossy compression of imag
 ----
 
 ### Introduction
-Lossless compression is about transforming information to a more compact version of itself. If, for instance, you need to download a big file from the internet, it takes less time to download a compressed version than the original. Similarly, storing a compressed file would require less space. Compression is definitely useful and there are a lot of algorithms for it. That being said, being able to reconstruct the original uncompressed file  as it was, bit for bit, restricts the efficiency that one can achieve. No algorithm is able to reduce the size of any arbitrary file one may have, otherwise you could just repeatedly compress any file with it until you get a 0 bits file. Clearly, there's a point where these files are "too packed" and any attempt to compress would not reduce the amount of bits. It is just not possible for it to recover the original file if the binary string was any smaller. A simpler way to see this is that with binary strings smaller than $$k$$ you can only represent $$2^{k} -2$$ different things. What do these strings represent depends on your algorithm. A good algorithm would give shorter strings to more common inputs.    
+Lossless compression is about transforming information to a more compact version of itself. If, for instance, you need to download a big file from the internet, it takes less time to download a compressed version than the original. Similarly, storing a compressed file would require less space. Compression is definitely useful and there are a lot of algorithms for it. That being said, being able to reconstruct the original uncompressed file as it was, bit for bit, restricts the efficiency that one can achieve. No algorithm is able to reduce the size of any arbitrary file one may have, otherwise you could just repeatedly compress any file with it until you get a 0 bits file. Clearly, there's a point where these files are "too packed" and any attempt to compress would not reduce the amount of bits. It is just not possible for it to recover the original file if the binary string was any smaller. A simpler way to see this is that with binary strings smaller than $$k$$ you can only represent $$2^{k} -2$$ different things. What do these strings represent depends on your algorithm. A good algorithm would give shorter strings to more common inputs.    
 
-Lossy compression is a different kind of game. Here you are not concerned with recovering the exact same file when decoding, you just need to output something "good enough". In other words, what you are looking for is how much reduction you can get away with without sacrificing *most* meaning. The word *meaning* is a somewhat nebulous term, take it as something that depends on what the file is going to be used for.  For example, suppose we care about compressing an image. We can apply a lot of techniques so as to reduce the image size without it looking different to the human eye. Anyone who sees the image might not recognize that it's not exactly the same thing. However, imagine that the creator of the original image added some secret message in such a way that you can't notice that it's there just by looking (see  [steganography](https://en.wikipedia.org/wiki/Steganography)). As our compression was just concerned with the output looking the same, the compression process probably destroyed the message. 
+Lossy compression is a different kind of game. Here you are not concerned with recovering the exact same file when decoding, you just need to output something "good enough". In other words, what you are looking for is how much reduction you can get away with without sacrificing *most* meaning. The word *meaning* is a somewhat nebulous term, take it as something that depends on what the file is going to be used for.  For example, suppose we care about compressing an image. We can apply a lot of techniques to reduce the image size without it looking different to the human eye. Anyone who sees the image might not recognize that it's not exactly the same thing. However, imagine that the creator of the original image added some secret message in such a way that you can't notice that it's there just by looking (see  [steganography](https://en.wikipedia.org/wiki/Steganography)). As our compression was just concerned with the output looking the same, the compression process probably destroyed the message. 
 
 In short, we care about different properties depending on what we are doing and so what we decide to keep should reflect that<sup>[1](#adversarial-atack)</sup>.
 
@@ -27,7 +27,7 @@ Let's start with a representation of an image. A simple and common format is a r
   <figcaption style="font-size:0.8em;"> RGB representation of an image. Each element in the grid is a pixel </figcaption>
 </figure>
 
-Before going into lossy compression, is this an efficient way to encode images? Suppose we only care about 300x300 images, with this representation we would use the same amount of bits no matter the content. This is well suited  when images are uniformly distrbuted. That is, when each of the $$2^{8\cdot 3 \cdot 300^2}$$ images is equally likely. However, the kind of pictures we send are not like that at all! 
+Before going into lossy compression, is this an efficient way to encode images? Suppose we only care about 300x300 images, with this representation we would use the same amount of bits no matter the content. This is well suited  when images are uniformly distributed. That is, when each of the $$2^{8\cdot 3 \cdot 300^2}$$ images is equally likely. However, the kind of pictures we send are not like that at all! 
 
 <figure align="center">
 
@@ -211,7 +211,7 @@ Anyway, after the cosine transform each value in the block is the coefficient of
    </figcaption>
 </figure>
 
-Now we do *quantization*. Basically, we transform each coefficient from real numbers to integers. In the quantization step the real line is split into pieces of the same length and then an integer is assigned to each one. If a number falls in a range with assigned integer $$x$$ then it is quantize to $$x$$. As this is true for any number that falls within the same range, you can't recover the original value you had before the quantization.  Of course, the smaller the pieces, the higher the precision that we get.   
+Now we do *quantization*. Basically, we transform each coefficient from real numbers to integers. In the quantization step the real line is split into pieces of the same length and then an integer is assigned to each one. If a number falls in a range with assigned integer $$x$$ then it is quantized to $$x$$. As this is true for any number that falls within the same range, you can't recover the original value you had before the quantization.  Of course, the smaller the pieces, the higher the precision that we get.   
 The trick is that in real images the higher frequencies tend to have close to zero coefficients so they dont contribute much to the image. Besides, our eyes don't pay much attention to these subtle higher frequencies effects anyway <sup>[6](#high-frequency-effects)</sup>. With that in mind, we can use less precision when storing those coefficients. In more formal terms, our quantization does the following: given block $$\boldsymbol B$$ and quantization table $$\boldsymbol Q$$:
 
 $$ (\text{quantized } \boldsymbol B)_{ij} = \text{round} \left( \frac{\boldsymbol B_{ij} }{\boldsymbol Q_{ij}} \right) $$
@@ -234,7 +234,7 @@ $$
 
 If your strings tends to have large runs of the same symbol repeating over and over then this trick might help reduce the string size. 
 
-Now, going back to what we have from the last step. After quantizating the channels, we ended up with three arrays in which many close values were mapped to the same integer, mainly in the higher frequencies. We need to flatten the arrays so that we can see them as a stream of symbols, just like in color encoding, and perform some loseless compression tricks. However, does every flattening work equally well? If we only want to use huffman encoding then yes, we really don't care about how we flatten the array. The performance of techniques like huffman encoding doesn't depend on the order of the symbols, just on the symbol distribution. On the other hand, run length encoding does depends on the order, it needs large runs to work well. So, if we are going use this last encoding, we better try to create large runs when flattening. 
+Now, going back to what we have from the last step. After quantizing the channels, we ended up with three arrays in which many close values were mapped to the same integer, mainly in the higher frequencies. We need to flatten the arrays so that we can see them as a stream of symbols, just like in color encoding, and perform some lossless compression tricks. However, does every flattening work equally well? If we only want to use huffman encoding then yes, we really don't care about how we flatten the array. The performance of techniques like huffman encoding doesn't depend on the order of the symbols, just on the symbol distribution. On the other hand, run length encoding does depend on the order, it needs large runs to work well. So, if we are going use this last encoding, we better try to create large runs when flattening. 
 
 The way that JPEG does this is that it zig-zags through the frequencies. By doing this, we get a large run of 0s since the higher frequencies are going to be stored together.  
 
@@ -246,14 +246,14 @@ The way that JPEG does this is that it zig-zags through the frequencies. By doin
    </figcaption>
 </figure>
 
-This is not the full story. There are other complicated processes in the loseless compression part of JPEG. JPEG separates the flat frequencies coefficients (the ones with k1=0, k2=0) from the rest and does something called Differential Pulse Code Modulation, I have no clue what that is.
+This is not the full story. There are other complicated processes in the lossless compression part of JPEG. JPEG separates the flat frequencies coefficients (the ones with k1=0, k2=0) from the rest and does something called Differential Pulse Code Modulation, I have no clue what that is.
 
 This is the part that we diverge significantly from JPEG. From here on, this is our custom version.
 
-We implement a much simpler loseless compression step that seems to work well enough. First, we don't separate the flat coefficients. Second, instead of zig-zagging through the block, we zig-zag through the whole array but only looking at one frequency at a time. That is, first we zig-zag the array, collecting all flat coefficients, then we switch to another frequency and repeat the process and so on. We hope that, when collecting all coefficients of some high frequency, we still get some large runs of 0s.  
+We implement a much simpler lossless compression step that seems to work well enough. First, we don't separate the flat coefficients. Second, instead of zigzagging through the block, we zig-zag through the whole array but only looking at one frequency at a time. That is, first we zig-zag the array, collecting all flat coefficients, then we switch to another frequency and repeat the process and so on. We hope that, when collecting all coefficients of some high frequency, we still get some large runs of 0s.  
 
 
-After doing this flattening, we concatenate the one-frequency sequences and so we end up with three flat arrays (one for each channel). Then we apply run length encoding to each one and separate the (symbol, count) sequences into two different sequences: one for symbols and one for counts. Finally we do huffman encoding to each of the three symbol sequences. This last step will add three codebooks to the header.
+After doing this flattening, we concatenate the one-frequency sequences and so we end up with three flat arrays (one for each channel). Then we apply run length encoding to each one and separate the (symbol, count) sequences into two different sequences: one for symbols and one for counts. Finally, we do huffman encoding to each of the three symbol sequences. This last step will add three codebooks to the header.
 
 ### The JPEG algorithm. Putting it all together
 We have all that we need. To summarize everything we've done in our slightly off JPEG implementation:
@@ -276,7 +276,7 @@ Now that we have our custom JPEG, we can test how well it works. We sample image
   {% include lossy-compression/performance_jpeg.html %}
 </div>
 
-Clearly, we are doing much better than the 12 bits per pixel of color coding. The fact that we can compress the image so much that it only needs a few bits per pixel is unbelievable. For instance. look at the the following:
+Clearly, we are doing much better than the 12 bits per pixel of color coding. The fact that we can compress the image so much that it only needs a few bits per pixel is unbelievable. For instance, look at the following:
 <figure align="center">
   <img src="/images/lossy-compression/compression_rate.png"/>
   <figcaption style="font-size:0.8em;"> 
@@ -284,7 +284,7 @@ Clearly, we are doing much better than the 12 bits per pixel of color coding. Th
   </figcaption>
 </figure>
 
-Remember, we began with 24 bits per pixel! With our custom JPEG, even using a small quantization multiplier, we end up using less than 3 bits per pixel and the image still looks really well. Not to mention, we were kind of sloppy in the loseless compression part and we still managed to greatly compress the image. 
+Remember, we began with 24 bits per pixel! With our custom JPEG, even using a small quantization multiplier, we end up using less than 3 bits per pixel and the image still looks really well. Not to mention, we were kind of sloppy in the lossless compression part and we still managed to greatly compress the image. 
 
 The thing that still amazes me is that looking at the images it definitely doesn't *feel* like they carry so little information per pixel. But they do. Pretty cool, right? 
 
@@ -301,7 +301,7 @@ The thing that still amazes me is that looking at the images it definitely doesn
 
 <a name="chrominace-constant">5</a>: Some implementations add a constant to the Cb and Cr components. This shift, strictly speaking, stops it from being just a change of basis.
 
-<a name="high-frequency-effects">6</a>: Some images (such as those containing text or things with lots of edeges) do have a large contribution of high frequency coefficientes. Their effect on the image is not subtle. In those situations, artifacts are going to be more noticable.
+<a name="high-frequency-effects">6</a>: Some images (such as those containing text or things with lots of edges) do have a large contribution of high frequency coefficients. Their effect on the image is not subtle. In those situations, artifacts are going to be more noticeable.
 
 ### References 
 - The wikipedia [page](https://en.wikipedia.org/wiki/JPEG) on JPEG is the main source for the JPEG part.
