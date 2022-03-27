@@ -232,9 +232,9 @@ The last step of the algorithm is the lossless compression step. First let's tal
 $$AAABBCAA \xrightarrow{\text{run length code}} (A3)(B2)(C1)(A2) 
 $$
 
-If your strings tends to have large runs of the same symbol repeating over and over then this trick might help reduce the string size. 
+If your strings tend to have large runs of the same symbol repeating over and over then this trick might help reduce the string size. 
 
-Now, going back to what we have from the last step. After quantizing the channels, we ended up with three arrays in which many close values were mapped to the same integer, mainly in the higher frequencies. We need to flatten the arrays so that we can see them as a stream of symbols, just like in color encoding, and perform some lossless compression tricks. However, does every flattening work equally well? If we only want to use huffman encoding then yes, we really don't care about how we flatten the array. The performance of techniques like huffman encoding doesn't depend on the order of the symbols, just on the symbol distribution. On the other hand, run length encoding does depend on the order, it needs large runs to work well. So, if we are going use this last encoding, we better try to create large runs when flattening. 
+Now, going back to what we have from the last step. After quantizing the channels, we ended up with three arrays in which many close values were mapped to the same integer, mainly in the higher frequencies. We need to flatten the arrays so that we can see them as a stream of symbols, just like in color encoding, and perform some lossless compression tricks. However, does every flattening work equally well? If we only want to use huffman encoding then yes, we really don't care about how we flatten the array. The performance of techniques like huffman encoding doesn't depend on the order of the symbols, just on the symbol distribution. On the other hand, run length encoding does depend on the order, it needs large runs to work well. So, if we are going to use this last encoding, we better try to create large runs when flattening. 
 
 The way that JPEG does this is that it zig-zags through the frequencies. By doing this, we get a large run of 0s since the higher frequencies are going to be stored together.  
 
