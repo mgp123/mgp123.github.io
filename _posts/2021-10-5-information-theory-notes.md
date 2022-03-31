@@ -45,7 +45,7 @@ The less bits per symbol we use, the better.  We still haven't answered: how goo
 By the law of large numbers<sup>[2](#reminder-large-numbers)</sup>, given an arbitrary function and $$X_1..X_n$$ i.i.d, the average $$f(X)$$ tends to the expected value in probability as $$n$$ tends to infinity.
 
 
-Let's take the function $$h(x)=-\log p(x)$$. Notice that the definition of $$h(x)$$ involves knowing the distribution so it's specific to the which distribution we are considering. It's expected value $$\mathbb{E}[h(X)] = H(X)$$ is called the *entropy* of the random variable. Entropy is a function of the distribution $$p$$. It can be interpreted as a measure of how "concentrated" a distribution is, less entropy meaning more concentrated (more predictable results). 
+Let's take the function $$h(x)=-\log p(x)$$. Notice that the definition of $$h(x)$$ involves knowing the distribution so it's specific to the which distribution we are considering. Its expected value $$\mathbb{E}[h(X)] = H(X)$$ is called the *entropy* of the random variable. Entropy is a function of the distribution $$p$$. It can be interpreted as a measure of how "concentrated" a distribution is, less entropy meaning more concentrated (more predictable results). 
 
 We define the *typical set* $$A_\epsilon^n$$ as the set of sequences whose sampled entropy is close enough to the real entropy.
 
