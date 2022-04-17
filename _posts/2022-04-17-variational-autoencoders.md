@@ -100,7 +100,7 @@ Going back to our problem, we want to estimate the probability of observing data
 
 $$ p_\theta(x) = \int\limits_{z} p_\theta(x|z)u(z) = \mathbb{E}_{Z \sim u} [p_\theta(x|Z)]$$
 
-which we could aproximate by sampling $$Z$$ and using $$\frac{1}{n} \sum_i p_\theta(x \mid z_i) $$.  As we just saw, estimating $$ p_\theta(x) $$ by using this kind of sampling can still be really expensive because it may be rare to get a $$z$$ that significantly contributes to the probability. So, we are going to modify the way we sample so that it depends on $$x$$. 
+which we can approximate by sampling $$Z$$ and using $$\frac{1}{n} \sum_i p_\theta(x \mid z_i) $$.  As we just saw, estimating $$ p_\theta(x) $$ by using this kind of sampling can still be really expensive because it may be rare to get a $$z$$ that significantly contributes to the probability. So, we are going to modify the way we sample so that it depends on $$x$$. 
 
 Before getting any further, we introduce a bit more notation.
 - $$q_\phi(z \mid x)$$  is going to be the parametrized distribution that we are going to sample from and we use $$\hat{Z}$$ for the random variable associated with this distribution.
@@ -213,7 +213,7 @@ $$ \log \mathbb{E}_{Z \sim u} [p_\theta(x|Z)] \text{ vs }  \mathbb{E}_{\hat{Z} \
 - Take $$K_l = \log \frac{1}{n}\sum p_\theta(X \mid Z_i)$$ to be our estimator for the left side 
 - Take $$K_r = \frac{1}{n}\sum \log p_\theta(X \mid \hat{Z}_{i \mid X})$$ to be our estimator for the right side 
 
-Intuitively it makes sense to think that, for the same $$n$$, $$K_r$$ has a smaller aproximation error on average.  However, is there a way to prove that it's true? More precisely, does this estimator have a smaller, let's say, mean square error?
+Intuitively it makes sense to think that, for the same $$n$$, $$K_r$$ has a smaller approximation error on average.  However, is there a way to prove that it's true? More precisely, does this estimator have a smaller, let's say, mean square error?
 
 I have no idea if there is any theorem about it. Is it true in general? If not, under what type of distributions can we guarantee that the property holds?
 
