@@ -222,7 +222,7 @@ I have no idea if there is any theorem about it. Is it true in general? If not, 
 
 Finally, we do a simple implementation of a VAE for image generation. You can see the details [here](https://github.com/mgp123/variational-autoencoder). The architecture is nothing fancy. Through trial and error we ended up with something that looks like this:
 <figure align="center"   >
-  <img  src="/images/vae/architecture.svg" />
+  <img  src="https://raw.githubusercontent.com/mgp123/variational-autoencoder/master/images/architecture.svg" />
   <figcaption  style="font-size:0.8em;"> 
     Our architecture
   </figcaption>
