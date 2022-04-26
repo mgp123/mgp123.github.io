@@ -201,7 +201,7 @@ which we can interpret as a sort of "fuzzy" autoencoder. Here, $$\phi$$ is tryin
   <img  src="/images/vae/vae_diagram.png" height=400 />
 </figure>
 
-We can see that the variance decides how important the regularization term should be. A large variance will prioritize making the distribution similar to $$u$$ over transmitting any information about $$x$$. On the other hand, a small variance will make $$\phi$$ only care about it being possible to reconstruct $$x$$ from $$\hat{z}$$ even if the distribution looks nothing like $$u$$. This may also lead to recovering traditional autoencoders provided that $$\phi$$ can is able to produce deterministic distributions.
+We can see that the variance decides how important the regularization term should be. A large variance will prioritize making the distribution similar to $$u$$ over transmitting any information about $$x$$. On the other hand, a small variance will make $$\phi$$ only care about it being possible to reconstruct $$x$$ from $$\hat{z}$$ even if the distribution looks nothing like $$u$$. This may also lead to recovering traditional autoencoders provided that $$\phi$$ is able to produce deterministic distributions.
 
 
 ### Is $$q_\phi$$ really more efficient?
