@@ -212,7 +212,7 @@ Anyway, after the cosine transform each value in the block is the coefficient of
 </figure>
 
 Now we do *quantization*. Basically, we transform each coefficient from real numbers to integers. In the quantization step the real line is split into pieces of the same length and then an integer is assigned to each one. If a number falls in a range with assigned integer $$x$$ then it is quantized to $$x$$. As this is true for any number that falls within the same range, you can't recover the original value you had before the quantization.  Of course, the smaller the pieces, the higher the precision that we get.   
-The trick is that in real images the higher frequencies tend to have close to zero coefficients so they dont contribute much to the image. Besides, our eyes don't pay much attention to these subtle higher frequencies effects anyway <sup>[6](#high-frequency-effects)</sup>. With that in mind, we can use less precision when storing those coefficients. In more formal terms, our quantization does the following: given block $$\boldsymbol B$$ and quantization table $$\boldsymbol Q$$:
+The trick is that in real images the higher frequencies tend to have close to zero coefficients so they dont contribute much to the image <sup>[6](#high-frequency-effects)</sup>. Besides, our eyes don't pay much attention to these subtle higher frequencies effects anyway . With that in mind, we can use less precision when storing those coefficients. In more formal terms, our quantization does the following: given block $$\boldsymbol B$$ and quantization table $$\boldsymbol Q$$:
 
 $$ (\text{quantized } \boldsymbol B)_{ij} = \text{round} \left( \frac{\boldsymbol B_{ij} }{\boldsymbol Q_{ij}} \right) $$
 
