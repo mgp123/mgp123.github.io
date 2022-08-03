@@ -268,7 +268,7 @@ As you can see, the outputs are blurry. This was one of the main problems of ear
 
 [^6]: Almost everywhere.
 
-[^7]: I hope it is clear that we can use any reconstruction loss $$l$$. This is equivalent to using noise distribution $$e^{-c \text{ }l(a,b)}$$ 
+[^7]: I hope it is clear that we can use any reconstruction loss $$l$$. This is equivalent to using noise distribution $$\propto e^{-c \text{ }l(a,b)}$$ 
 
 [^8]: I wonder if VAEs would work if we somehow managed to remove the $$I$$ term. My intuition is that they would, but I have no idea.
 
