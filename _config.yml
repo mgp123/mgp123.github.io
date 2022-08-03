@@ -7,9 +7,8 @@ url:         "mgp123.github.io"
 date_format: "%b %-d, %Y"
 
 
-
 # Google services
-google_verification:
+google_verification: k8_GcQ3XSGKZ7zpxZTzjo0yQHsrXPfZZC4PYrf_PFHA
 # Use either direct GA implementation or set up GTM account
 # - using both will skew your data (leave blank to not use at all)
 google_analytics:
