@@ -272,6 +272,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-sitemap
 
 BUNDLED WITH
-   2.2.28
+   2.2.29
