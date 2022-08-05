@@ -24,9 +24,9 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.61732962"
-     inkscape:cx="257.56095"
-     inkscape:cy="294.00825"
+     inkscape:zoom="0.87303592"
+     inkscape:cx="598.48626"
+     inkscape:cy="406.05431"
      inkscape:window-width="1280"
      inkscape:window-height="656"
      inkscape:window-x="0"
@@ -1065,7 +1065,7 @@
        y="66.313026"
        id="text23971-9-2-9-9"><tspan
          id="tspan23969-0-02-2-4"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222px;font-family:'Tlwg Typo';-inkscape-font-specification:'Tlwg Typo Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-orientation:upright;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.264583">Conv2d 1x1</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222px;font-family:'Tlwg Typo';-inkscape-font-specification:'Tlwg Typo Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-orientation:upright;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.264583">Conv2d 3x3</tspan></text>
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker53641)"
        d="m 100.18719,154.03113 c 0,6.04791 0,12.09556 3.58425,15.11925 3.58425,3.0237 10.7522,3.0237 17.92002,3.0237"
@@ -1162,12 +1162,12 @@
          transform="translate(0,-1.7638807)"><tspan
            x="81.914848"
            y="164.83681"
-           id="tspan39576">Normalizing Flow<tspan
+           id="tspan14294">Normalizing Flow<tspan
    y="164.83681"
-   id="tspan39578"> </tspan></tspan><tspan
+   id="tspan14296"> </tspan></tspan><tspan
            x="81.914848"
            y="168.36458"
-           id="tspan39580">Block</tspan></text>
+           id="tspan14298">Block</tspan></text>
     </g>
     <g
        id="g43635-2"
