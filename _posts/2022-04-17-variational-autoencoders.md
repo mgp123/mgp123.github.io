@@ -4,7 +4,8 @@ title:      Variational Autoencoders Notes
 date:       2022-04-17
 summary:    Me trying to understand how Variational Autoencoders work and some related notes
 mermaid: true
-
+update_date:  2022-08-05
+update_summary: Made some corrections regarding the final distribution
 ---
 
 <span style="font-size:0.8em;">I'm out of my depth here but I was curious enough about the subject to explore it. My probability background is not particularly strong, so these notes might be too simplistic and not reflect all the subtleties and interesting ideas involved</span>
@@ -86,6 +87,8 @@ In other words, each dataset sample is mainly pulling the closest (or the few cl
 </figure>
 
 
+Note that gaussian distributions with fixed variance are not the only possible distribution we can use. This is just an easy-to-understand example. Real VAEs tend to use more complicated distributions (see [here](../../../08/03/nvae/)), but the idea remains the same: let the network output some distribution that works as a training signal instead of using a single point. 
+
 ### How to approximate the log-likelihood
 
 This takes care of the problem of the training signal, but we still need to solve a more important issue. How do we approximate the log-likelihood? A natural answer would be by sampling the generator, however that's not a good idea.
@@ -145,7 +148,7 @@ Assuming that $$\phi$$ and $$\theta$$ are flexible enough, as we start doing gra
 
 ### An assumption on $$q_\phi$$
 
-In VAEs we decide to use $$q_\phi$$ and $$u$$ so that $$ D_{KL}[q_\phi(\cdot \mid x) \| u]$$ is easy to compute. That's a big assumption, we *hope* that it leads to a good enough lower bound. This is generally done by making them gaussian distributions. Here $$\phi$$ is going to be a neural network that takes $$x$$ and outputs the mean and variance, so $$\hat{Z} \mid x \sim  \mathcal{N}(\mu_\phi(x),\Sigma_\phi(x)) $$. Similarly, $$u$$ is going to be the standard gaussian distribution, so $$Z\sim \mathcal{N}(0,I) $$. The main idea here is that we hope $$\theta$$ is going to do most of the legwork by maximizing the lower bound while simultaneously keeping $$p_\theta(\cdot \mid x)$$ approximately gaussian (or whatever distribution we decide to use)
+In VAEs we usually decide to use $$q_\phi$$ and $$u$$ so that $$ D_{KL}[q_\phi(\cdot \mid x) \| u]$$ is easy to compute[^7]. That's a big assumption, we *hope* that it leads to a good enough lower bound. This is generally done by making them gaussian distributions. Here $$\phi$$ is going to be a neural network that takes $$x$$ and outputs the mean and variance, so $$\hat{Z} \mid x \sim  \mathcal{N}(\mu_\phi(x),\Sigma_\phi(x)) $$. Similarly, $$u$$ is going to be the standard gaussian distribution, so $$Z\sim \mathcal{N}(0,I) $$. The main idea here is that we hope $$\theta$$ is going to do most of the legwork by maximizing the lower bound while simultaneously keeping $$p_\theta(\cdot \mid x)$$ approximately gaussian (or whatever distribution we decide to use).
 
 ### Reparametrization trick
 
@@ -189,7 +192,7 @@ $$
 
 ### An interpretation as training a fuzzy autoencoder
 
-There is also a way to interpret this in an autoencoder context. We know that $$p_\theta(x \mid z)$$ is a gaussian with mean $$f_\theta(z)$$ so the logarithm is the square error multiplied by a constant associated with the variance[^7] (plus some constants). So, given the distribution $$(X,\hat{Z})$$, we are actually maximizing:
+There is also a way to interpret this in an autoencoder context. We know that $$p_\theta(x \mid z)$$ is a gaussian with mean $$f_\theta(z)$$ so the logarithm is the square error multiplied by a constant associated with the variance[^8] (plus some constants). So, given the distribution $$(X,\hat{Z})$$, we are actually maximizing:
 
 $$ 
 \frac{-1}{2 \sigma^2} \mathbb{E} [ \|X - f_\theta(\hat{Z})\|_2^2   -  D_{KL}[q_\phi(\cdot|X) \| u] ] 
@@ -228,6 +231,7 @@ Finally, we do a simple implementation of a VAE for image generation. You can se
   </figcaption>
 </figure>
 
+With our final distribution being a gaussian with fixed variance.
 Does batch normalization help at all? Is a latent representation of 1024  unnecesarly big? I don't have any answers for these questions but this architecture seems to work so if it ain't broke... 
 
 We trained our network on the 128x128 version of the [FFHQ dataset](https://github.com/NVlabs/ffhq-dataset). The hardest part is finding a good balance between the mean square error and the KL-penalty. We ended up with a $$10^{-4}$$ fraction of the loss coming from the KL-penalty and the rest from the square error. The samples look like this:
@@ -246,7 +250,7 @@ We trained our network on the 128x128 version of the [FFHQ dataset](https://gith
   </figcaption>
 </figure>
 
-As you can see, the outputs are blurry. This was one of the main problems of early VAEs for image generation.
+As you can see, the outputs are blurry. Looking back, this is probably due to the fact that we used a fixed variance, which is a really bad idea.
 
 
 ### References
@@ -268,7 +272,9 @@ As you can see, the outputs are blurry. This was one of the main problems of ear
 
 [^6]: Almost everywhere.
 
-[^7]: I hope it is clear that we can use any reconstruction loss $$l$$. This is equivalent to using noise distribution $$\propto e^{-c \text{ }l(a,b)}$$ 
+[^7]: This is not always true. Some VAEs do, in fact, bite the bullet and use sampling to estimate the KL-divergence
 
-[^8]: I wonder if VAEs would work if we somehow managed to remove the $$I$$ term. My intuition is that they would, but I have no idea.
+[^8]: I hope it is clear that we can use any reconstruction loss $$l$$. This is equivalent to using noise distribution $$\propto e^{-c \text{ }l(a,b)}$$ 
+<!-- 
+[^9]: I wonder if VAEs would work if we somehow managed to remove the $$I$$ term. My intuition is that they would, but I have no idea. -->
 
