@@ -2,7 +2,7 @@
 layout:     post
 title:      Simpson GAN
 date:       2022-01-30
-summary:    Using StyleGAN2-ADA to generate images from The Simpsons (with low quality results)
+summary:    Using StyleGAN2-ADA to generate images from The Simpsons (with low quality results).
 ---
 <span style="font-size:0.8em;">I'm not an expert in the topic. May contain errors!</span>
 

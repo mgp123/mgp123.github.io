@@ -2,10 +2,10 @@
 layout:     post
 title:      Variational Autoencoders Notes
 date:       2022-04-17
-summary:    Me trying to understand how Variational Autoencoders work and some related notes
+summary:    Me trying to understand how Variational Autoencoders work and some related notes.
 mermaid: true
 update_date:  2022-08-05
-update_summary: Made some corrections regarding the final distribution
+update_summary: Made some corrections regarding the final distribution.
 ---
 
 <span style="font-size:0.8em;">I'm out of my depth here but I was curious enough about the subject to explore it. My probability background is not particularly strong, so these notes might be too simplistic and not reflect all the subtleties and interesting ideas involved</span>

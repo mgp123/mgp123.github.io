@@ -2,7 +2,7 @@
 layout:     post
 title:      Short note about transforming distributions
 date:       2022-03-11
-summary:    A couple of proofs about applying functions to a random variable
+summary:    A couple of proofs about applying functions to a random variable.
 ---
 <span style="font-size:0.8em;">This was originally going to be part of another post, but it became so tangential to the topic that it didn't fit well there. It's just a short list of connected proofs about transforming distributions. Some proofs are my ideas, so it may contain errors!  </span>
 
