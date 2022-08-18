@@ -193,7 +193,7 @@ With 8x8 blocks (JPEG uses $$n=8$$) we get the following basis elements:
 <figure align="center">
   <img src="/images/lossy-compression/cosine_basis_8.png"/>
   <figcaption style="font-size:0.8em;"> 
-    Al the elements from the 8x8 cosine transform basis. Darker values are negative and lighter values are positive.
+    All the elements from the 8x8 cosine transform basis. Darker values are negative and lighter values are positive.
    </figcaption>
 </figure>
 
