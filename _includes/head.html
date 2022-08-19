@@ -64,7 +64,7 @@
     <meta property="og:site_name" content="{{ site.title | xml_escape }}">
     
     {% if page.thumbnail %}
-    <meta property="og:image" content="{{ site.url }}/{{ page.thumbnail }}">
+    <meta property="og:image" itemprop="image" content="{{ site.url }}/{{ page.thumbnail }}">
     <meta name="twitter:image" content="{{ site.url }}/{{ page.thumbnail }}" />
     {% endif %}
 
