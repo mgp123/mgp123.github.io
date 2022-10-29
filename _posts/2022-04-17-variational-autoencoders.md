@@ -2,10 +2,10 @@
 layout:     post
 title:      Variational Autoencoders Notes
 date:       2022-04-17
-summary:    Me trying to understand how Variational Autoencoders work and some related notes.
+summary:    Me trying to understand how Variational Autoencoders work and some related notes
 mermaid: true
 update_date:  2022-08-05
-update_summary: Made some corrections regarding the final distribution.
+update_summary: Made some corrections regarding the final distribution
 ---
 
 <span style="font-size:0.8em;">I'm out of my depth here but I was curious enough about the subject to explore it. My probability background is not particularly strong, so these notes might be too simplistic and not reflect all the subtleties and interesting ideas involved</span>
@@ -143,7 +143,7 @@ $$ \bbox[lightblue,30px,border:2px solid blue] {
 }
 $$
 
-As we want the bound to be as tight as possible we should optimize both on $$\theta$$ and on $$\phi$$. 
+As we want to increase the bound as much as possible, we should optimize both on $$\theta$$ and on $$\phi$$. 
 Assuming that $$\phi$$ and $$\theta$$ are flexible enough, as we start doing gradient ascent, $$q_\phi(\cdot \mid x)$$ will start to resemble $$p_\theta(\cdot \mid x)$$. However, if $$q_\phi$$ can imitate any complicated distribution then we are also in trouble: how are we going to know $$ D_{KL}[q_\phi(\cdot \mid x) \| u]$$ analytically ?
 
 ### An assumption on $$q_\phi$$
@@ -172,7 +172,7 @@ By playing a little with the equation of the objective we get that what are actu
 
 $$ - H(X) - D_{KL}[ X,\hat{Z} \| \hat{X},Z ]$$
 
-We changed the notation regarding KL-divergence in order to keep things short and to the point. $$D_{KL}[ X,\hat{Z} \| \hat{X},Z ]$$ is the divergence between the associated distributions of both random variables.  Like the entropy of $$X$$ acts as a constant we can ignore it so our optimization objective is 
+We changed the notation regarding KL-divergence in order to keep things short and to the point. $$D_{KL}[ X,\hat{Z} \| \hat{X},Z ]$$ is the divergence between the associated distributions of both random variables.  The entropy of $$X$$ is a constant, we can ignore it so our optimization objective is:
 
 $$ -D_{KL}[ X,\hat{Z} \| \hat{X},Z ]$$
 
@@ -192,7 +192,7 @@ $$
 
 ### An interpretation as training a fuzzy autoencoder
 
-There is also a way to interpret this in an autoencoder context. We know that $$p_\theta(x \mid z)$$ is a gaussian with mean $$f_\theta(z)$$ so the logarithm is the square error multiplied by a constant associated with the variance[^8] (plus some constants). So, given the distribution $$(X,\hat{Z})$$, we are actually maximizing:
+There is also a way to interpret this in an autoencoder context. Let's assume, following a previous example, that $$p_\theta(x \mid z)$$ is a gaussian with mean $$f_\theta(z)$$ and fixed variance. In that case the logarithm is the square error multiplied by a constant associated with this variance[^8] (plus some constants). So, given the distribution $$(X,\hat{Z})$$, we are actually maximizing:
 
 $$ 
 \frac{-1}{2 \sigma^2} \mathbb{E} [ \|X - f_\theta(\hat{Z})\|_2^2   -  D_{KL}[q_\phi(\cdot|X) \| u] ] 
@@ -206,6 +206,7 @@ which we can interpret as a sort of "fuzzy" autoencoder. Here, $$\phi$$ is tryin
 
 We can see that the variance decides how important the regularization term should be. A large variance will prioritize making the distribution similar to $$u$$ over transmitting any information about $$x$$. On the other hand, a small variance will make $$\phi$$ only care about it being possible to reconstruct $$x$$ from $$\hat{z}$$ even if the distribution looks nothing like $$u$$. This may also lead to recovering traditional autoencoders provided that $$\phi$$ is able to produce deterministic distributions.
 
+Note that this interpretation of "VAEs as reconstruction loss + regularization" also holds for more complicated $$p_\theta(x \mid z)$$ distributions. Although these are not as revealing as the relation between mean square error and the gaussian with fixed variance.
 
 ### Is $$q_\phi$$ really more efficient?
 
