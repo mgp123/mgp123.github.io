@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Noisy communication channels notes
-date:       2022-08-24
+date:       2022-12-06
 mermaid: true
 summary: How do you communicate when your messages might be changed on the way there? Some more notes on information theory.
 
