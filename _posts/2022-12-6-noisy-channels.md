@@ -13,10 +13,6 @@ thumbnail:  /images/noisy-channels/thumbnail.jpg
 ----
 
 
-<!-- <figure align="center">
-  <img  src="/images/distortion-theory/scientist.png" width=512/>
-</figure> -->
-
 ### An unreliable channel
 Imagine we need to send a large sequence of messages to someone using a channel to communicate. This channel, because of how it operates, can only transmit symbols from a fixed set that it can handle. This set of symbols can take many forms: it might be the set of real numbers, or it might be as simple as a binary channel which can only send 0s and 1s.
 The receiver on the other side has the job of recovering the original messages from the sequence of symbols on the channel.
@@ -64,7 +60,6 @@ Note that in this setup the channel is *memoryless* and without *feedback*.
 ### The binary channel
 
 As a helpful example, take the simple binary channel. Here $$\mathcal{X}_{enc}=\mathcal{X}_{dec}=\{0,1\}$$. Bit in, bit out. Thus, when the encoder sends a binary sequence, the decoder receives another binary sequence of the same length. Note that the intuition behind this channel is very simple: each bit sent through the channel has a (not necessarily symmetrical) chance to flip to the other bit
-<!-- We have transmission probabilities given by $$p(x_{dec} \mid x_{enc})$$ -->
 
 <figure align="center" style="text-align:center">
     <img  src="/images/noisy-channels/binary_channel.svg" width=800 />
