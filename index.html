@@ -23,6 +23,13 @@ layout: default
               {{ post.excerpt }}
             {% endif %}
           </span>
+          {% if post.image_preview %}
+
+            <figure align="center">
+              <img  src="{{ post.image_preview }}" />
+            </figure>
+          {% else %}
+          {% endif %}
         </div>
       {% endfor %}
     </div>
