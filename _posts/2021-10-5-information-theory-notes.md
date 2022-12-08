@@ -26,17 +26,17 @@ graph LR;
     D --> O[Output sequence];
 </div>
 
-The encoder receives an input sequence of a certain length $$n$$ and outputs a binary sequence of variable length. This binary sequence can then be passed to the decoder who, by already knowing how the encoder operates, should recover the original input. As the decoder may not use any extra information, the encoder must map any sequence into a different binary string<sup>[1](#encoding-zero-sequences)</sup>, also called a *non-singular code*. We would like to keep the binary strings as short as possible. How efficiently can we do it? (this problem comes in many flavors: fixed $$n$$, infinite symbols, added noise...) 
+The encoder receives an input sequence of a certain length $$n$$ and outputs a binary sequence of variable length. This binary sequence can then be passed to the decoder who, by already knowing how the encoder operates, should recover the original input. As the decoder may not use any extra information, the encoder must map any sequence into a different binary string<sup>[1](#encoding-zero-sequences)</sup>, also called a *non-singular code*. We would like to keep the binary strings as short as possible. How efficiently can we do it? (this problem comes in many flavors: fixed $$n$$, infinite messages, added noise...) 
 
 Suppose we have some fixed $$n$$.  We introduce some mathematical notation and then define formally what we mean by an efficient code.
 
 It's useful to see the encoding and decoding processes as functions. We write the encoder as $$C:{\{1..k\}}^n \rightarrow {\{0,1\}}^* $$ and the decoder as  $$D:{\{0,1\}}^* \rightarrow {\{1..k\}}^n$$. Being able to recover the input is the same as saying that $$D \circ C$$ is the identity.
 
-So, when we talk about a more efficient encoding we are referring to a smaller *expected length* of the encoded sequence. To make thing independent of $$n$$ we can divide the binary string length by $$n$$ to get the bits per symbol used on average. 
+So, when we talk about a more efficient encoding we are referring to a smaller *expected length* of the encoded sequence. To make thing independent of $$n$$ we can divide the binary string length by $$n$$ to get the bits per message used on average. 
  
 $$  \frac{1}{n} \cdot \mathbb{E}[ \text{length}(C(X_1..X_n))] $$
 
-The less bits per symbol we use, the better.  We still haven't answered: how good can we get and how does this changes with N?
+The less bits per message we use, the better.  We still haven't answered: how good can we get and how does this changes with N?
 
 
 
@@ -110,7 +110,7 @@ Knowing about the typical set and its size leads to a natural idea for an encode
 
 (the +1 is the result of needing an integer amount of bits hence we take the ceiling to guarantee covering every sequence. Adding one bit regardless gives an upper bound) 
 
-As boths encodings may use the same amount of bits we also need to append an extra bit so that the decoder may differentiate both cases. So an upper bound to the bits per symbol used by this encoding is
+As boths encodings may use the same amount of bits we also need to append an extra bit so that the decoder may differentiate both cases. So an upper bound to the bits per message used by this encoding is
 
 $$\frac{2}{n} + P(X_1,..X_n \not\in A_\epsilon^n) \cdot  \log  k  + P(X_1,..X_n \in A_\epsilon^n) \cdot  (H(X)+\epsilon)$$
 
@@ -120,7 +120,7 @@ The first and second term go to zero as $$n$$ goes to infinity and the probabili
 $$\frac{1}{n} \cdot \mathbb{E}[ \text{length } C(X_1..X_n)] \leq  (H(X)+\epsilon^\prime)$$
 
 This shows that 
-> Given $$\epsilon^\prime>0$$, there is an $$n_0$$ such that you can achieves using no more than $$H(X)+\epsilon^\prime$$ bits per symbol with some encoder for fixed length sequences when the sequence length $$n>n_0$$.
+> Given $$\epsilon^\prime>0$$, there is an $$n_0$$ such that you can achieves using no more than $$H(X)+\epsilon^\prime$$ bits per message with some encoder for fixed length sequences when the sequence length $$n>n_0$$.
 
 
 Something to think about: Is it possible to do better than $$H(X)$$ or is entropy a lower bound? We will see shortly that you can actually go below entropy but not much lower than that. 
@@ -132,7 +132,7 @@ Something to think about: Is it possible to do better than $$H(X)$$ or is entrop
 And what about an infinite sequence? That is, suppose the transmitter has to send an infinite sequence through the channel. In this context, the receiving side should be able to recover any prefix of the sequence by observing some prefix of the binary code.
 
 A valid strategy here is chopping the input into $$n$$ sized chunks and using the encoding method described above in each one. Then an optimal coding <sup>[3](#optimal-may-not-exist)</sup>
-should use at most $$H(X)$$ bits per symbol.
+should use at most $$H(X)$$ bits per message.
 
 
 
@@ -145,13 +145,13 @@ There are $$k$$ possible sequences. Each one needs to map to a different binary 
 
 $$p(i) < p(j), l_1<l_2 \rightarrow  p(i)\cdot l_2 +p(j)\cdot l_1 < p(i)\cdot l_1 +p(j)\cdot l_2$$
 
-In other words, if an encoding gives a shorter codeword to a rare symbol and a long codeword to a more common one, then you could get a better encoding by flipping both codewords. 
+In other words, if an encoding gives a shorter codeword to a rare message and a long codeword to a more common one, then you could get a better encoding by flipping both codewords. 
 
-As a consequence, the optimal encoding should give $$0$$ and $$1$$ to the two most likely symbols, $$00, 01,10,11$$ to the next four and so on. To calculate the efficiency, take $$p_1..p_k$$ to be the probabilities sorted in decreasing order. The optimal coding length $$L^*(p)$$ for our distribution $$p$$ is:
+As a consequence, the optimal encoding should give $$0$$ and $$1$$ to the two most likely messages, $$00, 01,10,11$$ to the next four and so on. To calculate the efficiency, take $$p_1..p_k$$ to be the probabilities sorted in decreasing order. The optimal coding length $$L^*(p)$$ for our distribution $$p$$ is:
 
 $$L^*(p)= \sum_{i=1}^k p_i \cdot \lfloor \log (i +1) \rfloor $$
 
-So we can easily get a closed form solution for the optimal encoding if we only want to transmit a symbol (or a fixed amount of symbols), which is nice. 
+So we can easily get a closed form solution for the optimal encoding if we only want to transmit a message (or a fixed amount of messages), which is nice. 
 
 <ins>Relation to entropy</ins>
 
@@ -206,12 +206,12 @@ So it seems that $$L^*$$ *may* go below entropy (or maybe or bound was too gener
 
 A simple example is enough. Take 4 events A,B,C,D equiprobables. An optimal code would, for instance, use codewords $$0,1,00,01$$, that is 1.5 bits on average yet this random variable has an entropy of 2 bits! 
 
-But what about coding a large sequence of events from this distribution? Would we be able to save 0.5 bits per symbol? If we are able to do it for an event then it seems resonable that it will work for $$n$$ events. Next we'll show that doesn't happen, any advantage is diluted with $$n$$
+But what about coding a large sequence of events from this distribution? Would we be able to save 0.5 bits per message? If we are able to do it for an event then it seems resonable that it will work for $$n$$ events. Next we'll show that doesn't happen, any advantage is diluted with $$n$$
 
 <ins>Coding sequences</ins>
 
 
-It is possible to interpret a sequence of fixed length $$n$$ as a variable itself. Putting this into the inequality is simple, replace $$k$$ for $$k^n$$ and $$H(X)$$ for $$H(W)$$. Also we should divide by $$n$$ to get bits per symbol.
+It is possible to interpret a sequence of fixed length $$n$$ as a variable itself. Putting this into the inequality is simple, replace $$k$$ for $$k^n$$ and $$H(X)$$ for $$H(W)$$. Also we should divide by $$n$$ to get bits per message.
 
 $$\frac{H(W)}{n} - \frac{\log \ln  k -2 - \log n }{n} \leq L_n^*(p)$$
 
@@ -223,23 +223,23 @@ $$= \mathbb{E}[-\log p(Z_1)] + \mathbb{E}[-\log p(Z_2)]$$
 
 $$= H(Z_1) + H(Z_2)$$
 
-Hence, $$H(W) = n \cdot H(X)$$ and the bits per symbol used with fixed $$n$$ is bounded by
+Hence, $$H(W) = n \cdot H(X)$$ and the bits per message used with fixed $$n$$ is bounded by
 
 $$H(X) - \frac{\log \ln  k -2 -\log n}{n} \leq L_n^*(p)$$
 
 The second term on the left tends to $$0$$, then:
 
-> Given $$\epsilon^\prime>0$$, there is an $$n_0$$ such that any encoder for fixed length sequences uses more than $$H(X)-\epsilon^\prime$$ bits per symbol when the sequence length $$n>n_0$$.
+> Given $$\epsilon^\prime>0$$, there is an $$n_0$$ such that any encoder for fixed length sequences uses more than $$H(X)-\epsilon^\prime$$ bits per message when the sequence length $$n>n_0$$.
 
 However we also know that by using a typical set encoder we can get close to the entropy as $$n$$ grows. The optimal encoding should use less than that encoder. Combining both results we conclude that:
 
-> The optimal encoding  for fixed length sequences tends to $$H(X)$$ bits per symbol as the sequence length grows
+> The optimal encoding  for fixed length sequences tends to $$H(X)$$ bits per message as the sequence length grows
 
 
-Which is pretty cool!. We now have a somewhat simple answer for our question. We need  $$n\cdot H(X)$$ bits or so to send a large sequence of symbols from the same distribution.
+Which is pretty cool!. We now have a somewhat simple answer for our question. We need  $$n\cdot H(X)$$ bits or so to send a large sequence of messages from the same distribution.
 
 ### Uniquely decodable codes
-For now we've been thinking about fixed length sequences of i.i.d random variables and checking how efficiently we can encode them. But what if we don't assume a length? It's possible to imagine an encoder/decoder system that works for any length. That is, transmitter and receiver agree to use a code such that the transmitter may send any arbitrary sequence without them both knowing its length beforehand. More formally the encoder $$C^{*}$$ is an injective function that maps $$\{1..k\}^* \rightarrow \{0,1\}^*$$. Talking about efficiency in this situation is trickier. If we want to use the bits per symbol equation we need to put $$n$$ inside the expectation:
+For now we've been thinking about fixed length sequences of i.i.d random variables and checking how efficiently we can encode them. But what if we don't assume a length? It's possible to imagine an encoder/decoder system that works for any length. That is, transmitter and receiver agree to use a code such that the transmitter may send any arbitrary sequence without them both knowing its length beforehand. More formally the encoder $$C^{*}$$ is an injective function that maps $$\{1..k\}^* \rightarrow \{0,1\}^*$$. Talking about efficiency in this situation is trickier. If we want to use the bits per message equation we need to put $$n$$ inside the expectation:
 
 $$   \mathbb{E}[\frac{1}{n} \cdot \text{length}(C^{*}(X_1..X_n))] $$
 
@@ -266,13 +266,13 @@ Now, as we already mentioned, our code should be non singular, meaning we can't 
 
 Uniquely decodable codes are non singular codes whose extension is also non singular.
 
-Using the extension of a uniquely decodable code on the bits per symbol equation we get
+Using the extension of a uniquely decodable code on the bits per message equation we get
 
 $$   \mathbb{E}[\frac{1}{n} \cdot \text{length}(C^{*}(X_1..X_n))]  = \mathbb{E}[\frac{1}{n} \cdot \sum_i\text{length } C(X_i)] =  \mathbb{E}[\text{length }C(X)]$$
 
 So is not dependent on $$n$$. Which is kind of obvious when you think about it. You are only concatenating the resulting strings. As a consequence, in the following we will be restricting ourselves to encoding using uniquely decodable codes as their performance doesn't depend on an $$n$$ distribution. 
 
-Also, using uniquely decodable codes is somewhat more realistic. As a transmitter you would like to start sending whatever new symbol has just arrived. You shouldn't have to wait for the input stream to end so that you can figure out what binary string to put into the channel. Maybe you have no way of knowing when the stream ends, if it ends at all.  This type of codes lets you do that, you don't have to remember what you have seen or know what will come next. This coding is, in a sense, instantaneous for the transmitter, you encode the symbol and send it and that's it. The same thing cannot be said about the receiver, it may require seeing a very large string ahead just to make sure what symbol to decode. If we want the coding to also be instantaneous for the receiver, we want what are called *prefix codes*. We'll talk more about prefix codes later.
+Also, using uniquely decodable codes is somewhat more realistic. As a transmitter you would like to start sending whatever new message has just arrived. You shouldn't have to wait for the input stream to end so that you can figure out what binary string to put into the channel. Maybe you have no way of knowing when the stream ends, if it ends at all.  This type of codes lets you do that, you don't have to remember what you have seen or know what will come next. This coding is, in a sense, instantaneous for the transmitter, you encode the message and send it and that's it. The same thing cannot be said about the receiver, it may require seeing a very large string ahead just to make sure what message to decode. If we want the coding to also be instantaneous for the receiver, we want what are called *prefix codes*. We'll talk more about prefix codes later.
 
 Before going any further, a very interesting question arises. Are uniquely decodable codes really enough? Or is it that we can get a more efficient code *when we do know* the $$n$$ distribution ahead of time? As we'll prove later, this kind of codes can't go below entropy so, at least for the specific case of fixed $$n$$, you may actually be more efficient than this. 
 
@@ -299,11 +299,11 @@ And in general:
 
 $$\left( \sum_{x \in \{1..k\}} 2^{-\text{length } C(x)} \right)^n = \sum_{x_1..x_n \in \{1..k\}} 2^{- \sum_i \text{length } C(x_i)}$$
 
-Notice that the exponents are all the ways of adding the code lengths of $$n$$ arbitrary symbols. We can group the exponents together by the sum of their lengths and get the following: 
+Notice that the exponents are all the ways of adding the code lengths of $$n$$ arbitrary messages. We can group the exponents together by the sum of their lengths and get the following: 
 
 $$= \sum_{m = 1}^{n \cdot \max C(x)} a(m) \cdot  2^{-m}$$
 
-where $$a(m)$$ is the number of sequences whose coding has combined length $$m$$ and $$\max C(x)$$ refers to the maximum coded length of a single symbol.
+where $$a(m)$$ is the number of sequences whose coding has combined length $$m$$ and $$\max C(x)$$ refers to the maximum coded length of a single message.
 
 How large can $$a(m)$$ be? Well, there are $$2^m$$ different binary strings of length $$m$$. If it were true that $$a(m)$$ is greater than $$2^m$$ then we should be able to find 2 sequences such that $$C^*(y_1..y_n) = C^*(z_1..z_n)$$. As $$C$$ is uniquely decodable, this can't be the case. Thus it must be true that $$a(m) \leq 2^m$$. By this bound we get
 
@@ -406,7 +406,7 @@ $$...$$
 $$E_n \rightarrow C(n)$$
 
 
-Requiring $$C$$ to be uniquely decodable is the same as $$G$$ being non ambiguous. But we want our encoding system to also be instantaneous for the receiver. That is, when the receiver finds a symbol that matches the binary string it just saw, it should be able to decode it as such and forget about it. No "looking ahead". But this is the same as asking $$G$$ to be LR(0)! And so what we are looking for is that no codeword is prefix of another .
+Requiring $$C$$ to be uniquely decodable is the same as $$G$$ being non ambiguous. But we want our encoding system to also be instantaneous for the receiver. That is, when the receiver finds a message that matches the binary string it just saw, it should be able to decode it as such and forget about it. No "looking ahead". But this is the same as asking $$G$$ to be LR(0)! And so what we are looking for is that no codeword is prefix of another .
 
 As $$G$$ being LR(0) implies it is non-ambiguous then all prefix codes are uniquely decodable. We can also be more generous and allow $$G$$ to be an LR grammar. This translates to having to look some finite amount of bits ahead before decoding. However this is not necessary, prefix codes are as good as any possible uniquely decodable code. We have already shown this indirectly. During the proof of P2, we constructed a prefix code for $$l_1..l_n$$ following $$\sum_{l} 2^{-l} \leq 1$$ . And P1 tells us that any uniquely decodable code satisfies said restriction on its lengths. So
 
@@ -416,7 +416,7 @@ As $$G$$ being LR(0) implies it is non-ambiguous then all prefix codes are uniqu
 
 How good can uniquely decodable codes be? Can they do better than entropy?
 
-Suppose there is such code $$C$$ using  $$H(X) - c $$ bits. As a result, $$C^*$$ should also use  $$H(X) - c $$ bits per symbol for any length $$n$$. However, we know that the optimal code for fixed $$n$$ tends to $$H(X)$$. Yet the existence of $$C$$ would contradict this propety as we could use $$C^*$$ for any fixed length and the optimal should do better than $$C^*$$. Therefore we conclude that $$C$$ doesn't exist. Any uniquely decodable code must use at least $$H(X)$$ bits on average.
+Suppose there is such code $$C$$ using  $$H(X) - c $$ bits. As a result, $$C^*$$ should also use  $$H(X) - c $$ bits per message for any length $$n$$. However, we know that the optimal code for fixed $$n$$ tends to $$H(X)$$. Yet the existence of $$C$$ would contradict this propety as we could use $$C^*$$ for any fixed length and the optimal should do better than $$C^*$$. Therefore we conclude that $$C$$ doesn't exist. Any uniquely decodable code must use at least $$H(X)$$ bits on average.
 
 To bound the optimal uniquely decodable code from above we just construct a good enough code. Take the lengths:
 
@@ -426,7 +426,7 @@ This obeys the restriction
 
 $$\sum_{i=1}^k 2^{-l_i} =  \sum_{i=1}^k 2^{\lfloor \log p_i \rfloor} \leq \sum_{i=1}^k 2^{\log p_i} = \sum_{i=1}^k p_i = 1$$
 
-So by property P2, we can find a uniquely decodable code for these $$l_i$$. The bits per symbol used is given by
+So by property P2, we can find a uniquely decodable code for these $$l_i$$. The bits per message used is given by
 
 $$\sum_{i=1}^k p_i \cdot - \lfloor \log p_i \rfloor \leq \sum_{i=1}^k p_i \cdot -(\log p_i - 1) = H(X) + 1$$
 
@@ -441,11 +441,11 @@ How about lumping together various $$X$$s and using a uniquely decodable code fo
 
 ### KL-divergence
 
-Now we are going to try to relate different distributions and how it affects the encoding. Let's say that we are trying to encode symbols from $$X$$ with distribution given by $$p$$ but we are working under the incorrect assumption that the distribution is really $$q$$. How bad is this? 
+Now we are going to try to relate different distributions and how it affects the encoding. Let's say that we are trying to encode messages from $$X$$ with distribution given by $$p$$ but we are working under the incorrect assumption that the distribution is really $$q$$. How bad is this? 
 
-First, we should take for granted that any possible symbol that may appear under $$p$$ also appears under $$q$$ (otherwise the encoding we got from $$q$$ wouldn't have a code for those symbols). This is equivalent to $$p_i \neq 0 \rightarrow q_i \neq 0 $$. As we are assuming that each symbol we are trying to encode has some chance of happening under $$p$$, this simplifies to $$q_i \neq 0$$ <sup>[4](#q-sum-one)</sup>. 
+First, we should take for granted that any possible message that may appear under $$p$$ also appears under $$q$$ (otherwise the encoding we got from $$q$$ wouldn't have a code for those messages). This is equivalent to $$p_i \neq 0 \rightarrow q_i \neq 0 $$. As we are assuming that each message we are trying to encode has some chance of happening under $$p$$, this simplifies to $$q_i \neq 0$$ <sup>[4](#q-sum-one)</sup>. 
 
-If we encode symbol $$i$$ using  $$- \lfloor \log q_i \rfloor$$ bits we end up using
+If we encode message $$i$$ using  $$- \lfloor \log q_i \rfloor$$ bits we end up using
 
 $$ \text{bits used} = \sum_i p_i  \cdot -\lfloor \log q_i \rfloor $$
 
@@ -609,9 +609,9 @@ R -->|Y| D[Decoder]
 
 How does it know the value of $$Y$$? Maybe the transmitter is sending it through an extra channel, maybe it already knows it from somewhere else. We don't really care. The point being, in this situation, what kind of coder/decoder system can we build?
 
-Notice that this is not the same situation that we had before. For instance, the same binary sequence can decode to different symbols depending on $$Y$$, something that was completely forbidden before. Here encoder and decoder can agree to use a different code depending on the result of $$Y$$. This extra freedom may add efficiency to our code. 
+Notice that this is not the same situation that we had before. For instance, the same binary sequence can decode to different messages depending on $$Y$$, something that was completely forbidden before. Here encoder and decoder can agree to use a different code depending on the result of $$Y$$. This extra freedom may add efficiency to our code. 
 
-As a first approach, we could just completely ignore $$Y$$ and use an optimal code for $$X$$ alone, as we did before. This uses $$H(X)$$ bits per symbol or so. 
+As a first approach, we could just completely ignore $$Y$$ and use an optimal code for $$X$$ alone, as we did before. This uses $$H(X)$$ bits per message or so. 
 
 But suppose that we are in the situation that $$Y=y$$. This means that the distribution we'll observe is going to be $$X \vert Y=y$$. If we want to optimize our code when $$Y=y$$ then, after seeing $$y$$, we should use an optimal code for this particular distribution. This requires $$H(X \vert Y=y)$$ bits (the entropy of $$X \vert Y=y$$ ).
  
@@ -645,7 +645,7 @@ No matter how close to the expected value you want the average to be ($$\epsilon
 <a name="optimal-may-not-exist">3</a>: If the optimal encoding exists at all! In this situation as the sequence is infinite, it may very well be that you can always find a slightly better one so the minimum is never reached.
 
 
-<a name="q-sum-one">4</a>: Note that we don't need to restrict ourselves to $$ \sum_i q_i = 1 $$. That is, $$q$$ can have some extra symbols in its distribution besides those that also happen under $$p$$. 
+<a name="q-sum-one">4</a>: Note that we don't need to restrict ourselves to $$ \sum_i q_i = 1 $$. That is, $$q$$ can have some extra messages in its distribution besides those that also happen under $$p$$. 
 
 <a name="conditional-entropy-is-lower">5</a>: Doing it formally is not hard but it involves talking about other stuff. Also this informal proof is one of those things that are not in Cover and Thomas. It just ocurred to me and it seemed such a nice and elegant way to do it. It's possible that this trick is flawed in some subtle way I don't see.
 
