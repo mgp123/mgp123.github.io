@@ -246,7 +246,7 @@ $$   \mathbb{E}[\frac{1}{n} \cdot \text{length}(C^{*}(X_1..X_n))] $$
 
 And so we need an $$n$$ distribution assumption.
 
-Further progress can be made by considering a subclass of codes called *uniquely decodable codes*. Suppose we have a code $$C: \{1..k\} \rightarrow \{0,1\}$$ . We define its extension $$C^{*}: \{1..k\}^* \rightarrow \{0,1\}^*$$ which maps arbitrary finite sequence of inputs to binary strings by concatenating the encoding of each input.
+Further progress can be made by considering a subclass of codes called *uniquely decodable codes*. Suppose we have a code $$C: \{1..k\} \rightarrow \{0,1\}^*$$ . We define its extension $$C^{*}: \{1..k\}^* \rightarrow \{0,1\}^*$$ which maps arbitrary finite sequence of inputs to binary strings by concatenating the encoding of each input.
 
 $$C^{*}(x_1..x_n) = C(x_1)..C(x_n) $$
 
