@@ -49,7 +49,7 @@ graph LR;
     S --> O[Outcome]
 </div>
 
-With this trick, no matter what we get from the network there is *some* chance of getting x. More importantly the network receives a training signal. The network outputs are the gaussian means so it's going to try to move them close to the dataset samples.
+With this trick, no matter what we get from the network there is *some* chance of getting x[^kernel]. More importantly the network receives a training signal. The network outputs are the gaussian means so it's going to try to move them close to the dataset samples.
 
 We can be a little bit more formal about this. To keep things from getting confusing we use $$f_\theta$$ to denote the neural network, not the full network + noise. Similarly $$Z$$ refers only to the random variable that goes through the network. We still use $$p_\theta$$ to refer to the final distribution.
 
@@ -276,6 +276,7 @@ As you can see, the outputs are blurry. Looking back, this is probably due to th
 [^7]: This is not always true. Some VAEs do, in fact, bite the bullet and use sampling to estimate the KL-divergence
 
 [^8]: I hope it is clear that we can use any reconstruction loss $$l$$. This is equivalent to using noise distribution $$\propto e^{-c \text{ }l(a,b)}$$ 
-<!-- 
-[^9]: I wonder if VAEs would work if we somehow managed to remove the $$I$$ term. My intuition is that they would, but I have no idea. -->
+
+[^kernel]: This is the same procedure done in kernel density estimation. A common method for creating distributions from samples without assigning all probability to seen samples. Although we are kind of doing it backwards here. We are creating the distribution using the kernels instead of using kernels to emulate an unknown distribution.
+
 
