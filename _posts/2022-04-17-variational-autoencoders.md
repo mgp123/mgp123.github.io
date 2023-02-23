@@ -77,12 +77,12 @@ with $$r_{ij} = x_i - f_\theta(z_j), \boldsymbol{d}_{ij} = \|r_{ij}\|_2 $$ and
 $$ \mathrm{softmin}(a_j,  a)= \frac{e^{-a_j}}{\sum_k e^{-a_k}}$$ 
 
 
-In other words, each dataset sample is mainly pulling the closest (or the few closest) network samples. With a bigger variance the softmin becomes less pronounced, so samples that are father away start to get a bigger and bigger proportion of the pull. That is, bigger variance leads to larger range but reduced "precision".
+In other words, each dataset sample is mainly pulling the closest (or the few closest) network samples. With a bigger variance, the softmin becomes less pronounced, so samples that are farther away start to get a bigger and bigger proportion of the pull. That is, bigger variance leads to a larger range but reduced "precision".
 
 <figure align="center"   >
   <img  src="/images/vae/gaussian_effect.png" />
   <figcaption   style="font-size:0.8em;"> 
-    Gaussian noise makes each network sample contribute to the probability with better guesses having a larger contribution. On the right we see the log-likelihood gradient for each network sample.
+    Gaussian noise makes each network sample contribute to the probability with better guesses having a larger contribution. On the right, we see the log-likelihood gradient for each network sample.
    </figcaption>
 </figure>
 
@@ -93,11 +93,11 @@ Note that gaussian distributions with fixed variance are not the only possible d
 
 This takes care of the problem of the training signal, but we still need to solve a more important issue. How do we approximate the log-likelihood? A natural answer would be by sampling the generator, however that's not a good idea.
 
-As an analogy for what's going on here let's picture the following: You and a friend each have a deck of cards. Normally you would use these decks for some very elaborate card game. Each of your cards have all sort of complicated effects on the behavior of the game. Your friend's cards don't need to be the same as yours, although you may have some cards in common or with similar behavior. So, your friend picks ten random cards from her deck and shows them to you[^5].  *How likely are you to get something like this?* How can you estimate this efficiently?
+As an analogy for what's going on here let's picture the following: You and a friend each have a deck of cards. Normally you would use these decks for some very elaborate card game. Each of your cards has all sorts of complicated effects on the behavior of the game. Your friend's cards don't need to be the same as yours, although you may have some cards in common or with similar behavior. So, your friend picks ten random cards from her deck and shows them to you[^5].  *How likely are you to get something like this?* How can you estimate this efficiently?
 
-A possible approach is taking a bunch of one card samples from your deck. With this, you can estimate the probability of getting each of the individual cards from your friend’s hand (or something similar). Then you can combine the results by multiplying the probabilities, and you are done. Notice that your sampling procedure involves picking cards at random from a large deck and counting the appearances of things you were looking for. The downside with this method is that it is going to be really inefficient provided that the deck has enough diversity. *Estimating the probability of a rare event by sampling is hard because, well, because it’s rare.*
+A possible approach is taking a bunch of one-card samples from your deck. With this, you can estimate the probability of getting each of the individual cards from your friend’s hand (or something similar). Then you can combine the results by multiplying the probabilities, and you are done. Notice that your sampling procedure involves picking cards at random from a large deck and counting the appearances of things you were looking for. The downside with this method is that it is going to be really inefficient provided that the deck has enough diversity. *Estimating the probability of a rare event by sampling is hard because, well, because it’s rare.*
 
-Ideally we would like to sample from a distribution such that the event whose probability we are trying to approximate is a fairly common one. That’s the main idea. We would like to sample from a (hopefully) “easier” distribution. Of course, if we don't use the original distribution then our estimated probabilities are not going to match exactly with the ones we truly want. We are gaining some efficiency but at the cost of having a biased estimate
+Ideally, we would like to sample from a distribution such that the event whose probability we are trying to approximate is a fairly common one. That’s the main idea. We would like to sample from a (hopefully) “easier” distribution. Of course, if we don't use the original distribution then our estimated probabilities are not going to match exactly with the ones we truly want. We are gaining some efficiency but at the cost of having a biased estimate
 
 Going back to our problem, we want to estimate the probability of observing dataset sample $$x$$ when sampling the generator.
 
@@ -113,7 +113,7 @@ Now we are going to derive a useful property. Take the KL-divergence between bot
 
 $$D_{KL}[q_\phi(\cdot|x) \| p_\theta(\cdot|x)] =  \mathbb{E}_{\hat{Z} \sim q_\phi(\cdot|x)} [\log q_\phi(\hat{Z}|x) - \log p_\theta(\hat{Z}|x)] $$
 
-By Bayes's rule we have:
+By Bayes's rule, we have:
 
 $$ p_\theta(z|x) = \frac{p_\theta(x|z)u(z)}{p_\theta(x)} $$
 
@@ -130,13 +130,13 @@ $$ \log p_\theta(x) -   D_{KL}[q_\phi(\cdot|x) \| p_\theta(\cdot|x)] =  \mathbb{
 So we can estimate $$\log p_\theta(x)$$ by sampling any distribution that we want. This is not without a few setbacks 
 
 1. We don't know  $$D_{KL}[q_\phi(\cdot\mid x) \| p_\theta(\cdot\mid x)]$$ and 
-2. $$  D_{KL}[q_\phi(\cdot \mid x) \| u]$$ can only be known analytically if both $$q_\phi(\cdot\mid x)$$ and $$u$$ are "easy". Otherwise we must estimate it via sampling. 
+2. $$  D_{KL}[q_\phi(\cdot \mid x) \| u]$$ can only be known analytically if both $$q_\phi(\cdot\mid x)$$ and $$u$$ are "easy". Otherwise, we must estimate it via sampling. 
 
 The VAEs approach is to ignore  $$D_{KL}[q_\phi(\cdot\mid x) \| p_\theta(\cdot\mid x)]$$ and simply use the right side of the equation. This ends up as a lower bound on the log-probability of $$x$$
 
 $$ \log p_\theta(x) \geq  \mathbb{E}_{\hat{Z} \sim q_\phi(\cdot|x)} [\log p_\theta(x|Z)]  -  D_{KL}[q_\phi(\cdot|x) \| u] $$
 
-called evidence lower bound (*ELBO*), with equality only if $$q_\phi(\cdot \mid x)$$ and $$p_\theta(\cdot \mid x)$$ are the same [^6]. So, instead of maximizing the log-likelihood of the dataset we try to maximize the expected value of the right side of the equation:
+called evidence lower bound (*ELBO*), with equality only if $$q_\phi(\cdot \mid x)$$ and $$p_\theta(\cdot \mid x)$$ are the same [^6]. So, instead of maximizing the log-likelihood of the dataset, we try to maximize the expected value of the right side of the equation:
 
 $$ \bbox[lightblue,30px,border:2px solid blue] {
 \mathbb{E}_{X \sim p} [ \mathbb{E}_{\hat{Z} \sim q_\phi(\cdot|X)} [\log p_\theta(X|\hat{Z})]  -  D_{KL}[q_\phi(\cdot|X) \| u]] 
@@ -144,7 +144,7 @@ $$ \bbox[lightblue,30px,border:2px solid blue] {
 $$
 
 As we want to increase the bound as much as possible, we should optimize both on $$\theta$$ and on $$\phi$$. 
-Assuming that $$\phi$$ and $$\theta$$ are flexible enough, as we start doing gradient ascent, $$q_\phi(\cdot \mid x)$$ will start to resemble $$p_\theta(\cdot \mid x)$$. However, if $$q_\phi$$ can imitate any complicated distribution then we are also in trouble: how are we going to know $$ D_{KL}[q_\phi(\cdot \mid x) \| u]$$ analytically ?
+Assuming that $$\phi$$ and $$\theta$$ are flexible enough, as we start doing gradient ascent, $$q_\phi(\cdot \mid x)$$ will start to resemble $$p_\theta(\cdot \mid x)$$. However, if $$q_\phi$$ can imitate any complicated distribution then we are also in trouble: how are we going to know $$ D_{KL}[q_\phi(\cdot \mid x) \| u]$$ analytically?
 
 ### An assumption on $$q_\phi$$
 
@@ -160,7 +160,7 @@ As an example, for gaussian distributions we may use $$\hat{z}_i = \mu_\phi(x) +
 
 ### An interpretation of the objective using KL-divergence
 
-Here is an interesting view that might help understand what are we really trying to maximize.
+Here is an interesting view that might help us understand what are we really trying to maximize.
 - First, take $$(X,\hat{Z})$$ to be the pair of random variables with the corresponding distributions. To get a sample from this pair you would first sample $$X$$ and then you would sample $$\hat{Z}$$ from the conditional given by $$q_\phi$$. 
 - Similarly, take $$(\hat{X},Z)$$. Here you would sample from $$Z$$ and then from the conditional given by $$p_\theta$$. 
 
@@ -168,7 +168,7 @@ Notice that $$X$$ and $$Z$$ have given distributions while:
 - The $$\hat{Z}$$-distribution is determined by $$\phi$$  
 - The $$\hat{X}$$-distribution is determined by $$\theta$$ 
 
-By playing a little with the equation of the objective we get that what are actually optimizing is :
+By playing a little with the equation of the objective we get that what we are actually optimizing is :
 
 $$ - H(X) - D_{KL}[ X,\hat{Z} \| \hat{X},Z ]$$
 
@@ -210,7 +210,7 @@ Note that this interpretation of "VAEs as reconstruction loss + regularization" 
 
 ### Is $$q_\phi$$ really more efficient?
 
-Remember that we introduced $$q_\phi$$ hoping that it's more sample efficient than sampling directly from $$u$$. As $$q_\phi$$ is ultimatly trying to get close to $$p_\theta(\cdot \mid x)$$ let's assume that they are equal. The question now is, which is more sample efficient to estimate on average?
+Remember that we introduced $$q_\phi$$ hoping that it's more sample efficient than sampling directly from $$u$$. As $$q_\phi$$ is ultimately trying to get close to $$p_\theta(\cdot \mid x)$$ let's assume that they are equal. The question now is, which is more sample efficient to estimate on average?
 
 $$ \log \mathbb{E}_{Z \sim u} [p_\theta(x|Z)] \text{ vs }  \mathbb{E}_{\hat{Z} \sim p_\theta(\cdot|x)} [\log p_\theta(x|\hat{Z})] $$
 
@@ -233,7 +233,7 @@ Finally, we do a simple implementation of a VAE for image generation. You can se
 </figure>
 
 With our final distribution being a gaussian with fixed variance.
-Does batch normalization help at all? Is a latent representation of 1024  unnecesarly big? I don't have any answers for these questions but this architecture seems to work so if it ain't broke... 
+Does batch normalization help at all? Is a latent representation of 1024 unnecessarily big? I don't have any answers for these questions but this architecture seems to work so if it ain't broke... 
 
 We trained our network on the 128x128 version of the [FFHQ dataset](https://github.com/NVlabs/ffhq-dataset). The hardest part is finding a good balance between the mean square error and the KL-penalty. We ended up with a $$10^{-4}$$ fraction of the loss coming from the KL-penalty and the rest from the square error. The samples look like this:
 <figure align="center"   >
@@ -277,6 +277,6 @@ As you can see, the outputs are blurry. Looking back, this is probably due to th
 
 [^8]: I hope it is clear that we can use any reconstruction loss $$l$$. This is equivalent to using noise distribution $$\propto e^{-c \text{ }l(a,b)}$$ 
 
-[^kernel]: This is the same procedure done in kernel density estimation. A common method for creating distributions from samples without assigning all probability to seen samples. Although we are kind of doing it backwards here. We are creating the distribution using the kernels instead of using kernels to emulate an unknown distribution.
+[^kernel]: This is the same procedure done in kernel density estimation. A common method for creating distributions from samples without assigning all probability to seen samples. Although we are kind of doing it backward here. We are creating the distribution using the kernels instead of using kernels to emulate an unknown distribution.
 
 

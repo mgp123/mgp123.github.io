@@ -32,17 +32,17 @@ Suppose we have some fixed $$n$$.  We introduce some mathematical notation and t
 
 It's useful to see the encoding and decoding processes as functions. We write the encoder as $$C:{\{1..k\}}^n \rightarrow {\{0,1\}}^* $$ and the decoder as  $$D:{\{0,1\}}^* \rightarrow {\{1..k\}}^n$$. Being able to recover the input is the same as saying that $$D \circ C$$ is the identity.
 
-So, when we talk about a more efficient encoding we are referring to a smaller *expected length* of the encoded sequence. To make thing independent of $$n$$ we can divide the binary string length by $$n$$ to get the bits per message used on average. 
+So, when we talk about a more efficient encoding we are referring to a smaller *expected length* of the encoded sequence. To make things independent of $$n$$ we can divide the binary string length by $$n$$ to get the bits per message used on average. 
  
 $$  \frac{1}{n} \cdot \mathbb{E}[ \text{length}(C(X_1..X_n))] $$
 
-The less bits per message we use, the better.  We still haven't answered: how good can we get and how does this changes with N?
+The less bits per message we use, the better.  We still haven't answered the: how good can we get and how does this changes with N?
 
 
 
 ### Typical Set
 
-By the law of large numbers<sup>[2](#reminder-large-numbers)</sup>, given an arbitrary function and $$X_1..X_n$$ i.i.d, the average $$f(X)$$ tends to the expected value in probability as $$n$$ tends to infinity (if the expected value exist).
+By the law of large numbers<sup>[2](#reminder-large-numbers)</sup>, given an arbitrary function and $$X_1..X_n$$ i.i.d, the average $$f(X)$$ tends to the expected value in probability as $$n$$ tends to infinity (if the expected value exists).
 
 
 Let's take the function $$h(x)=-\log p(x)$$. Notice that the definition of $$h(x)$$ involves knowing the distribution so it's specific to the distribution we are considering. Its expected value $$\mathbb{E}[h(X)] = H(X)$$ is called the *entropy* of the random variable. Entropy is a function of the distribution $$p$$. It can be interpreted as a measure of how "concentrated" a distribution is, less entropy meaning more concentrated (more predictable results). 
@@ -88,7 +88,7 @@ Applying this to the typical set we get
 
 $$P(X_1,..X_n \in A_\epsilon^n) \cdot 2^{n(H(X)-\epsilon)} \leq |A_\epsilon^n| \leq 2^{n(H(X)+\epsilon)} $$
 
-The upper bound is specially interesting however unsurprising. It shows that, depending on the entropy, the fraction of possibles sequences in the typical set goes to zero as $$n$$ grows.
+The upper bound is specially interesting however unsurprising. It shows that, depending on the entropy, the fraction of possible sequences in the typical set goes to zero as $$n$$ grows.
 
 <figure align="center">
   <img src="/images/information-theory/typical_set.svg" />
@@ -110,7 +110,7 @@ Knowing about the typical set and its size leads to a natural idea for an encode
 
 (the +1 is the result of needing an integer amount of bits hence we take the ceiling to guarantee covering every sequence. Adding one bit regardless gives an upper bound) 
 
-As boths encodings may use the same amount of bits we also need to append an extra bit so that the decoder may differentiate both cases. So an upper bound to the bits per message used by this encoding is
+As both encodings may use the same amount of bits we also need to append an extra bit so that the decoder may differentiate both cases. So an upper bound to the bits per message used by this encoding is
 
 $$\frac{2}{n} + P(X_1,..X_n \not\in A_\epsilon^n) \cdot  \log  k  + P(X_1,..X_n \in A_\epsilon^n) \cdot  (H(X)+\epsilon)$$
 
@@ -141,7 +141,7 @@ should use at most $$H(X)$$ bits per message.
 
 Solving the problem of optimal encoding for an arbitrary but fixed $$n$$ seems hard. Yet, this is no different than solving for $$n=1$$. Any sequence of events $$X_1..X_n$$ can be seen as a random variable $$W$$ with $$k^n$$ possible results. So we will try to solve this for $$n=1$$. 
 
-There are $$k$$ possible sequences. Each one needs to map to a different binary string. As we want to be as efficient as possible, it only make sense to use the $$k$$ smaller sequences from $$\{0,1\}^*$$. So our code should use $$0,1,00,01,10,11...$$ and so on. The optimal encoder must give the shorter codes to the most likely outcomes. This is because
+There are $$k$$ possible sequences. Each one needs to map to a different binary string. As we want to be as efficient as possible, it only makes sense to use the $$k$$ smaller sequences from $$\{0,1\}^*$$. So our code should use $$0,1,00,01,10,11...$$ and so on. The optimal encoder must give the shorter codes to the most likely outcomes. This is because
 
 $$p(i) < p(j), l_1<l_2 \rightarrow  p(i)\cdot l_2 +p(j)\cdot l_1 < p(i)\cdot l_1 +p(j)\cdot l_2$$
 
@@ -163,7 +163,7 @@ To keep the notation from getting out of hand we introduce
 
 $$\bar{L}(p) = \sum_{i=1}^k p_i \cdot \log (i+1) $$
 
-As a consequence we can bound $$\bar{L}(p) - 1\leq L^*(p)$$. Substracting entropy from both sides we get: 
+As a consequence we can bound $$\bar{L}(p) - 1\leq L^*(p)$$. Subtracting entropy from both sides we get: 
 
 $$\bar{L}(p)- H(X) - 1 \leq  L^*(p) -  H(X) $$
 
@@ -190,7 +190,7 @@ Now we get a lower bound for $$c$$
 
 $$\frac{1}{c} = \sum_{i=1}^k \frac{1}{i+1} \leq \int_1^{k+1} \frac{1}{x} = \ln (k+1) \leq 2 \cdot \ln k$$
 
-(the last inequality asumes $$k\geq2$$). 
+(the last inequality assumes $$k\geq2$$). 
 
 So
 
@@ -200,7 +200,7 @@ Bringing it all together we get the following bound for the optimal code
 
 $$H(X) - \log \ln k - 2 \leq L^*(p)$$
 
-So it seems that $$L^*$$ *may* go below entropy (or maybe or bound was too generous?) but not by much. Also it grows very slowly with $$k$$.
+So it seems that $$L^*$$ *may* go below entropy (or maybe or bound was too generous?) but not by much. Also, it grows very slowly with $$k$$.
 
 <ins>Going below entropy</ins>
 
@@ -215,7 +215,7 @@ It is possible to interpret a sequence of fixed length $$n$$ as a variable itsel
 
 $$\frac{H(W)}{n} - \frac{\log \ln  k -2 - \log n }{n} \leq L_n^*(p)$$
 
-But we can write the entropy of $$W$$ as a function of the entropy of $$X$$ by the folowing property: the entropy of a pair of independent random variables is their sum.
+But we can write the entropy of $$W$$ as a function of the entropy of $$X$$ by the following property: the entropy of a pair of independent random variables is their sum.
 
 $$ H(Z_1,Z_2) = \mathbb{E}[-\log p(Z_1,Z_2)] = \mathbb{E}[-\log \left( p(Z_1)\cdot p(Z_2) \right)]$$
 
@@ -231,12 +231,12 @@ The second term on the left tends to $$0$$, then:
 
 > Given $$\epsilon^\prime>0$$, there is an $$n_0$$ such that any encoder for fixed length sequences uses more than $$H(X)-\epsilon^\prime$$ bits per message when the sequence length $$n>n_0$$.
 
-However we also know that by using a typical set encoder we can get close to the entropy as $$n$$ grows. The optimal encoding should use less than that encoder. Combining both results we conclude that:
+However, we also know that by using a typical set encoder we can get close to the entropy as $$n$$ grows. The optimal encoding should use less than that encoder. Combining both results we conclude that:
 
 > The optimal encoding  for fixed length sequences tends to $$H(X)$$ bits per message as the sequence length grows
 
 
-Which is pretty cool!. We now have a somewhat simple answer for our question. We need  $$n\cdot H(X)$$ bits or so to send a large sequence of messages from the same distribution.
+Which is pretty cool! We now have a somewhat simple answer to our question. We need  $$n\cdot H(X)$$ bits or so to send a large sequence of messages from the same distribution.
 
 ### Uniquely decodable codes
 For now we've been thinking about fixed length sequences of i.i.d random variables and checking how efficiently we can encode them. But what if we don't assume a length? It's possible to imagine an encoder/decoder system that works for any length. That is, transmitter and receiver agree to use a code such that the transmitter may send any arbitrary sequence without them both knowing its length beforehand. More formally the encoder $$C^{*}$$ is an injective function that maps $$\{1..k\}^* \rightarrow \{0,1\}^*$$. Talking about efficiency in this situation is trickier. If we want to use the bits per message equation we need to put $$n$$ inside the expectation:
@@ -321,7 +321,7 @@ $$\sum_{x \in \{1..k\}} 2^{-\text{length } C(x)} \leq 1$$
 This is a constructive proof. We are going to find a code that uses $$l_1..l_n$$.
 
 
-For this we need some propeties of binary trees.
+For this we need some properties of binary trees.
 
 Take a binary tree $$A$$, then 
 
@@ -406,7 +406,7 @@ $$...$$
 $$E_n \rightarrow C(n)$$
 
 
-Requiring $$C$$ to be uniquely decodable is the same as $$G$$ being non ambiguous. But we want our encoding system to also be instantaneous for the receiver. That is, when the receiver finds a message that matches the binary string it just saw, it should be able to decode it as such and forget about it. No "looking ahead". But this is the same as asking $$G$$ to be LR(0)! And so what we are looking for is that no codeword is prefix of another .
+Requiring $$C$$ to be uniquely decodable is the same as $$G$$ being nonambiguous. But we want our encoding system to also be instantaneous for the receiver. That is, when the receiver finds a message that matches the binary string it just saw, it should be able to decode it as such and forget about it. No "looking ahead". But this is the same as asking $$G$$ to be LR(0)! And so what we are looking for is that no codeword is prefix of another.
 
 As $$G$$ being LR(0) implies it is non-ambiguous then all prefix codes are uniquely decodable. We can also be more generous and allow $$G$$ to be an LR grammar. This translates to having to look some finite amount of bits ahead before decoding. However this is not necessary, prefix codes are as good as any possible uniquely decodable code. We have already shown this indirectly. During the proof of P2, we constructed a prefix code for $$l_1..l_n$$ following $$\sum_{l} 2^{-l} \leq 1$$ . And P1 tells us that any uniquely decodable code satisfies said restriction on its lengths. So
 
@@ -416,7 +416,7 @@ As $$G$$ being LR(0) implies it is non-ambiguous then all prefix codes are uniqu
 
 How good can uniquely decodable codes be? Can they do better than entropy?
 
-Suppose there is such code $$C$$ using  $$H(X) - c $$ bits. As a result, $$C^*$$ should also use  $$H(X) - c $$ bits per message for any length $$n$$. However, we know that the optimal code for fixed $$n$$ tends to $$H(X)$$. Yet the existence of $$C$$ would contradict this propety as we could use $$C^*$$ for any fixed length and the optimal should do better than $$C^*$$. Therefore we conclude that $$C$$ doesn't exist. Any uniquely decodable code must use at least $$H(X)$$ bits on average.
+Suppose there is such code $$C$$ using  $$H(X) - c $$ bits. As a result, $$C^*$$ should also use  $$H(X) - c $$ bits per message for any length $$n$$. However, we know that the optimal code for fixed $$n$$ tends to $$H(X)$$. Yet the existence of $$C$$ would contradict this property as we could use $$C^*$$ for any fixed length and the optimal should do better than $$C^*$$. Therefore we conclude that $$C$$ doesn't exist. Any uniquely decodable code must use at least $$H(X)$$ bits on average.
 
 To bound the optimal uniquely decodable code from above we just construct a good enough code. Take the lengths:
 
@@ -647,7 +647,7 @@ No matter how close to the expected value you want the average to be ($$\epsilon
 
 <a name="q-sum-one">4</a>: Note that we don't need to restrict ourselves to $$ \sum_i q_i = 1 $$. That is, $$q$$ can have some extra messages in its distribution besides those that also happen under $$p$$. 
 
-<a name="conditional-entropy-is-lower">5</a>: Doing it formally is not hard but it involves talking about other stuff. Also this informal proof is one of those things that are not in Cover and Thomas. It just ocurred to me and it seemed such a nice and elegant way to do it. It's possible that this trick is flawed in some subtle way I don't see.
+<a name="conditional-entropy-is-lower">5</a>: Doing it formally is not hard but it involves talking about other stuff. Also this informal proof is one of those things that are not in Cover and Thomas. It just occurred to me and it seemed such a nice and elegant way to do it. It's possible that this trick is flawed in some subtle way I don't see.
 
 ### References
 
@@ -656,5 +656,5 @@ No matter how close to the expected value you want the average to be ($$\epsilon
 - *Alfred V. Aho and Jeffrey D. Ullman. 1972. The theory of parsing, translation, and compiling*. This is for the short section on context free grammars. I haven't searched for references connecting context free grammars with encoding but someone must have thought of it already.
 - *Alexandre B. Tsybakov. 2008. Introduction to Nonparametric Estimation*. The proof for the KL-divergence bound on the L1-distance was taken almost verbatim from chapter 2.
 
-Any content not in those references is *more likely to be wrong*  as I have reasoned it myself. Hopefully everything is correct but and I am not an expert. That being said...
+Any content not in those references is *more likely to be wrong*  as I have reasoned it myself. Hopefully everything is correct but I am not an expert. That being said...
 

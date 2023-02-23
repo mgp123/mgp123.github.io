@@ -19,7 +19,7 @@ $$ f(Z) \sim p$$
 
 <ins>Proof</ins>
 
-Let $$P_x$$ be the cumulative distribution of $$p$$. Like $$p$$ has no points acumulating probability we know that $$P_x$$ is continuous. Take: 
+Let $$P_x$$ be the cumulative distribution of $$p$$. Like $$p$$ has no points accumulating probability we know that $$P_x$$ is continuous. Take: 
 
 $$f(z) = \{\inf x \text{ such that } z \leq P_x(x) \} $$
 
@@ -62,7 +62,7 @@ As a consequence of the last two results, we get that given $$X,Y\in \mathbb{R} 
 
 ### From n-uniform to n-distribution
 
-Similarly, we can use the same trick with n dimensional variables. Let $$X\in \mathbb{R^n}$$ be a random variable with distribution $$p$$ and let $$X_1..X_n$$ be its components. Let $$Z_1..Z_n \in \mathbb{R}$$ each with distribution $$U(0,1)$$
+Similarly, we can use the same trick with n-dimensional variables. Let $$X\in \mathbb{R^n}$$ be a random variable with distribution $$p$$ and let $$X_1..X_n$$ be its components. Let $$Z_1..Z_n \in \mathbb{R}$$ each with distribution $$U(0,1)$$
 
 We just need to pick $$f_i$$ to model the conditional distributions.
 
@@ -83,14 +83,14 @@ Take the binary representation of $$Z$$. It's easy to see that the digits are i.
 
 ### From n-distribution to m-distribution
 
-By the previous ideas we can also go from any distribution to any other (still assuming continuous densities). More precisely, given random variables $$X\in \mathbb{R^n},Y\in \mathbb{R^m}  $$ with distributions $$p,q$$, there is a $$g:  \mathbb{R^n}\rightarrow \mathbb{R^m}$$ such that $$g(X)\sim q$$
+By the previous ideas, we can also go from any distribution to any other (still assuming continuous densities). More precisely, given random variables $$X\in \mathbb{R^n},Y\in \mathbb{R^m}  $$ with distributions $$p,q$$, there is a $$g:  \mathbb{R^n}\rightarrow \mathbb{R^m}$$ such that $$g(X)\sim q$$
 
 
 ### The problem with discrete distributions
 
-Trying to replicate these results with discrete distributions doesn't work. A simple way to see this is noting that entropy can't increase after applying a transformation, $$ H(g(X)) \leq H(X) $$. As a consequence $$X$$ can't be used to model random variables with more entropy. In other words, you can't go from less random to more random. A trivial example would be a totally deterministic $$X$$ (so $$H(X)=0$$). No matter which function you apply, you get a deterministic outcome, so you can't model something like a coin flip.
+Trying to replicate these results with discrete distributions doesn't work. A simple way to see this is noting that entropy can't increase after applying a transformation, $$ H(g(X)) \leq H(X) $$. As a consequence, $$X$$ can't be used to model random variables with more entropy. In other words, you can't go from less random to more random. A trivial example would be a totally deterministic $$X$$ (so $$H(X)=0$$). No matter which function you apply, you get a deterministic outcome, so you can't model something like a coin flip.
 
-What about the other direction? Is starting from a high entropy distribution a sufficient condition for modelling a lower entropy distribution? The answer is that we can't do that either. As an example, there is no function that maps the result of a 7-sided die to the result of a 6-sided die.
+What about the other direction? Is starting from a high entropy distribution a sufficient condition for modeling a lower entropy distribution? The answer is that we can't do that either. As an example, there is no function that maps the result of a 7-sided die to the result of a 6-sided die.
 
 Of course, this discussion is only valid when we are talking about using a function $$g$$ mapping results from one distribution to another. If we allowed ourselves to, for instance, grab multiple samples of $$X$$ then we may do better. With 3 coin flips we can model an 8-sided die even though a coin flip has less entropy. And we can model a 6-sided die with a 7-sided die by simply rolling again if we get a 7.  
 

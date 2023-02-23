@@ -27,7 +27,7 @@ Let's start with a representation of an image. A simple and common format is a r
   <figcaption style="font-size:0.8em;"> RGB representation of an image. Each element in the grid is a pixel </figcaption>
 </figure>
 
-Before going into lossy compression, is this an efficient way to encode images? Suppose we only care about 300x300 images, with this representation we would use the same amount of bits no matter the content. This is well suited  when images are uniformly distributed. That is, when each of the $$2^{8\cdot 3 \cdot 300^2}$$ images is equally likely. However, the kind of pictures we send are not like that at all! 
+Before going into lossy compression, is this an efficient way to encode images? Suppose we only care about 300x300 images, with this representation we would use the same amount of bits no matter the content. This is well suited when images are uniformly distributed. That is, when each of the $$2^{8\cdot 3 \cdot 300^2}$$ images is equally likely. However, the kind of pictures we send are not like that at all! 
 
 <figure align="center">
 
@@ -36,7 +36,7 @@ Before going into lossy compression, is this an efficient way to encode images? 
   <figcaption style="font-size:0.8em;"> 
   On the left, an image from Picsum, it will give you a different sample each time you reload (may need to clear cache stuff).
 
-  On the right a sample from an uniform distribution  </figcaption>
+  On the right a sample from a uniform distribution  </figcaption>
 </figure>
 
 The distribution of real images<sup>[2](#image-distribution)</sup> does not resemble the uniform distribution and so this encoding is far from optimal. We know that given the random variable $$I$$ representing the image, its entropy $$H(I)$$ is linked to how good we can encode. But how are we going to find out the $$I$$ distribution? Is it even possible to estimate $$H(I)$$ ? Those are hard questions and I have no idea how to approach them (but it's fun to think about them). 
@@ -47,10 +47,10 @@ Here is a trick to compress RGB images, we may think of the image as a stream of
 
 $$\text{pixel entropy} = \sum_{\text{color} \in \text{image}}  f(\text{color}) \cdot - \log f(\text{color})$$
 
-where $$f$$ denote the frequency.  People seem to use "entropy of the image" to refer to this "pixel entropy" quantity, so we'll go with that.
+where $$f$$ denotes the frequency.  People seem to use "entropy of the image" to refer to this "pixel entropy" quantity, so we'll go with that.
 
 We can use an optimal prefix code such as huffman codes <sup>[3](#huffman-codes)</sup> for coding the colors. This allows us to get close to entropy bits per pixel.
-However, things are not so simple. Given that our color encoding will depend on the image we are considering, we should also include this codebook in the header of the coded image. The problem is that this overhead can be quite punishing if the image has a lot of different colors. In the worst case scenario, the image has no repeating colors at all so we would more than double the original file size! Hopefully this doesn't happen. We are relying on the assumption that we are far from this situation with real images, meaning the reduction from the coding would more than compensate the overhead, at least on the average case.
+However, things are not so simple. Given that our color encoding will depend on the image we are considering, we should also include this codebook in the header of the coded image. The problem is that this overhead can be quite punishing if the image has a lot of different colors. In the worst case scenario, the image has no repeating colors at all so we would more than double the original file size! Hopefully, this doesn't happen. We are relying on the assumption that we are far from this situation with real images, meaning the reduction from the coding would more than compensate the overhead, at least on the average case.
 
 Having said that, there's also a bunch of low level details that we need to add to make an algorithm from this idea. For instance: How do we encode/decode the codebook? How do we combine multiple binary strings into a single binary string in such a way that the decoder can recover each of the originals? We gloss over all these implementation details, which can be seen in the [repo](https://github.com/mgp123/lossy-compression). 
 
@@ -67,7 +67,7 @@ So yeah, the header does play a large role in the bits per pixel used<sup>[4](#b
 ### Color clustering
 Ok, color coding can't do better than 12 bits per pixel on average because that's the average entropy. But what if we modify the image so as to bring the entropy down? Now we are in the lossless compression domain. 
 
-Images often have gradual changes so they end up using a lot of very similar colors. In our color coding scheme, each one of these colors is a different symbol with a very low frequency. We could group colors together and use a single much more likely symbol. This method will reduce the entropy but now we won't be able to recover the original color from the symbol, only some group statistic such as the mean. 
+Images often have gradual changes so they end up using a lot of very similar colors. In our color coding scheme, each one of these colors is a different symbol with a very low frequency. We could group colors together and use a single much more likely symbol. This method will reduce the entropy but now we won't be able to recover the original color from the symbol, only some group statistics such as the mean. 
 
 Well, how do we cluster? There's a long list of clustering algorithms to choose from, here is DBSCAN with different levels of clustering: 
 
@@ -78,7 +78,7 @@ Well, how do we cluster? There's a long list of clustering algorithms to choose 
    </figcaption>
 </figure>
 
-A small clustering can reduce the entropy without making the artifacts too noticable. Also, we can get a huge reduction if we don't mind the artifacts that much.
+A small clustering can reduce the entropy without making the artifacts too noticeable. Also, we can get a huge reduction if we don't mind the artifacts that much.
 
 
 ### Linear algebra with images
@@ -93,9 +93,9 @@ $$ ( \alpha \cdot A)_{ijc} = \alpha \cdot {A}_{ijc} $$
 so this is a vector space and all the nice properties that it implies. A less pretentious way to see this is that we can flatten $$S$$ to get ordinary $$\text{width} \cdot \text{height} \cdot 3$$-dinmensional vectors.
 
 
-It follows that we can write any image as a linear combination with a basis of S. We should note that the elements that constitude this basis may or may not be images themselves as they can have negative values, non-integers or values larger than 255. Some basis are quite famous and a lot of fun effects are just simple modifications on a different basis. The heart of JPEG relies on using a good basis, but we are getting ahead of ouselves. 
+It follows that we can write any image as a linear combination with a basis of S. We should note that the elements that constitute this basis may or may not be images themselves as they can have negative values, non-integers or values larger than 255. Some basis are quite famous and a lot of fun effects are just simple modifications on a different basis. The heart of JPEG relies on using a good basis, but we are getting ahead of ourselves. 
 
-Supose we decide to compress an image by erasing all information from certain pixels. We are not concerned here with *how* we encode the resulting image, just assume that we can. The reconstructed image is going to be kind of "uneven" in the sense that some pixels will be a complete representation of the original and some will be have no relation to the original pixel at all. We can do tricks such as interpolating its neighbors to kind of hide it but this is no different than guessing. For all we know the pixel could be completely different than its surroundings. 
+Suppose we decide to compress an image by erasing all information from certain pixels. We are not concerned here with *how* we encode the resulting image, just assume that we can. The reconstructed image is going to be kind of "uneven" in the sense that some pixels will be a complete representation of the original and some will have no relation to the original pixel at all. We can do tricks such as interpolating its neighbors to kind of hide it but this is no different than guessing. For all we know the pixel could be completely different than its surroundings. 
 
 
 With some imagination, we can see what's happening when we remove pixels from a linear algebra point of view.
@@ -116,7 +116,7 @@ $$ I = \sum I_{ijc} \cdot \boldsymbol C^{ijc} $$
 
 So, what happens when we erase all information from a certain pixel? This is simply removing the components related to $$\boldsymbol C^{ij1},\boldsymbol C^{ij2}$$ and $$\boldsymbol C^{ij3}$$. The rest of the components are unaffected. If we look at this phenomenon for a while, it's obvious what is really going on: *It's a projection!* Our "guessing" was just some fancy way to get values from $$<\boldsymbol C^{ij1} \boldsymbol C^{ij2} \boldsymbol C^{ij3}>$$ (the orthogonal complement) that looked good enough. Naturally, erasing information from multiple pixels translates to removing more elements from the basis. 
 
-This perspective is really nice and leads to the following idea: Why should we stick with the standard basis when we can use any basis we want?  That is, we can transform our image to a different cordinate system and then apply some lossy compression algorithm there. For example we can pick some arbitrary linear subspace to project our image into and just store those coefficients.
+This perspective is really nice and leads to the following idea: Why should we stick with the standard basis when we can use any basis we want?  That is, we can transform our image to a different coordinate system and then apply some lossy compression algorithm there. For example, we can pick some arbitrary linear subspace to project our image into and just store those coefficients.
 
 <figure align="center">
   <img src="/images/lossy-compression/charly_projection_32x32.gif" width=300/>
@@ -127,24 +127,24 @@ This perspective is really nice and leads to the following idea: Why should we s
 
 That being said, there are some details to keep in mind:
 
--  Does our compression algorithm choose the basis depending on the image content? If it is image dependant then the header needs some extra information so the decoding part can work out the basis.  On the other hand, if the basis doesn't depend on the image content at all, no extra information is needed to know which basis was used. 
+-  Does our compression algorithm choose the basis depending on the image content? If it is image dependent then the header needs some extra information so the decoding part can work out the basis.  On the other hand, if the basis doesn't depend on the image content at all, no extra information is needed to know which basis was used. 
 
-- How much precision do we want when storing the coefficients? Standard floats uses 32 bits, this is 4 times more than the 8 bits of the RGB format. Clearly we need to do something better than this.
+- How much precision do we want when storing the coefficients? Standard floats use 32 bits, this is 4 times more than the 8 bits of the RGB format. Clearly, we need to do something better than this.
 
 
 
 ### The JPEG algorithm. Preamble 
 
-Now we try and implement JPEG, a real image compression algorithm (and a very common one that everyone uses). JPEG achieves such a high reduction in file size that it's absolutely amazing. Its mechanism relies on exploiting deficiencies on how humans actually see (plus a good encoding). 
+Now we try and implement JPEG, a real image compression algorithm (and a very common one that everyone uses). JPEG achieves such a high reduction in file size that it's absolutely amazing. Its mechanism relies on exploiting deficiencies in how humans actually see (plus a good encoding). 
 
-The algorithm is a multistep process with many moving parts. We will go through each, one by one, but in a nutshell it goes like this: it applies two different transformations, each one followed by a lossy compression step,  and then a losseless compression step in the end.  
+The algorithm is a multi-step process with many moving parts. We will go through each, one by one, but in a nutshell, it goes like this: it applies two different transformations, each one followed by a lossy compression step,  and then a lossless compression step in the end.  
 
 In JPEG, each transformation is a change of basis that is independent of the image so there is no header penalty involved in applying them. JPEG also has some adjustable parameters that control the amount of compression. 
 
 ### The JPEG algorithm. YCbCr Transform 
-In the first step we do a per pixel transformation. Instead of using ranges of red, green and blue to indicate the pixel color, we use a different set of components called luminance (Y), blue chrominance (Cb) and red chrominance (Cr).
+In the first step, we do a per-pixel transformation. Instead of using ranges of red, green and blue to indicate the pixel color, we use a different set of components called luminance (Y), blue chrominance (Cb) and red chrominance (Cr).
 
-Luminance ranges from black to white. Blue chrominance ranges from a yelowish green to purple. Red chrominance ranges from a light green to pink. 
+Luminance ranges from black to white. Blue chrominance ranges from yellowish green to purple. Red chrominance ranges from light green to pink. 
 
 <figure align="center">
   <img src="/images/lossy-compression/ranges_YCbCr.png"  height=100 width=600/>
@@ -164,11 +164,11 @@ Each value is just a linear combination of the RGB values so, in the end, this i
    </figcaption>
 </figure>
 
-After doing this transformation we do some lossy compression. The intuition is that while our eyes are good at detecting changes in brightness, we don't really see color all that well. For this reason, it's possible to reduce the quality in the chroma channels without it being noticeable. More precisely, after separating the components, we subsample the chroma channels, reducing the amount of rows and columns (for example discarding/averaging across multiple rows/columns). The common subsampling for JPEG seems to use one sample per 2x2 block for the chroma channels. Just by doing this we get a nice reduction to 12 bits per pixel. We should note however that the subsampling part is not particularly powerful, it doesn't reduce the file size that much, at least compared to the following steps. If we wanted to, we could skip the subsampling without significantly affecting the compression.
+After doing this transformation we do some lossy compression. The intuition is that while our eyes are good at detecting changes in brightness, we don't really see color all that well. For this reason, it's possible to reduce the quality of the chroma channels without it being noticeable. More precisely, after separating the components, we subsample the chroma channels, reducing the amount of rows and columns (for example discarding/averaging across multiple rows/columns). The common subsampling for JPEG seems to use one sample per 2x2 block for the chroma channels. Just by doing this we get a nice reduction to 12 bits per pixel. We should note however that the subsampling part is not particularly powerful, it doesn't reduce the file size that much, at least compared to the following steps. If we wanted to, we could skip the subsampling without significantly affecting the compression.
 
 ### The JPEG algorithm. Cosine Transform
 
-From the last step, the image has been separated into Y, Cb and Cr. Now comes a more complicated transformation. In short, the basic idea is grouping the channel array into nxn blocks and then using cosine transforms to separate each block into its spatial frequencies. Cosine transforms are similar to Fourier transforms but they use only cosines waves as their basis instead of complex exponentials. The basis elements $$\boldsymbol A^{k_1k_2}$$ for the nxn blocks are:
+From the last step, the image has been separated into Y, Cb and Cr. Now comes a more complicated transformation. In short, the basic idea is grouping the channel array into nxn blocks and then using cosine transforms to separate each block into its spatial frequencies. Cosine transforms are similar to Fourier transforms but they use only cosine waves as their basis instead of complex exponentials. The basis elements $$\boldsymbol A^{k_1k_2}$$ for the nxn blocks are:
 
 $$  (\boldsymbol A^{k_1k_2})_{ij} = 
 
@@ -184,7 +184,7 @@ $$  (\boldsymbol A^{k_1k_2})_{ij} =
 $$
 
 
-The alpha multipliers just act as scaling constants. We could use any scaling constants we want (naturally, this will affect the coefficients we get after applying the transformation). In our implementation we use $$ \alpha(0) = 1 $$ and $$ \alpha(x \neq 0) = 2$$. As far as I know these are not the ones that JPEG uses but they are simple and seem to work well on practice.
+The alpha multipliers just act as scaling constants. We could use any scaling constants we want (naturally, this will affect the coefficients we get after applying the transformation). In our implementation we use $$ \alpha(0) = 1 $$ and $$ \alpha(x \neq 0) = 2$$. As far as I know these are not the ones that JPEG uses but they are simple and seem to work well in practice.
 
 The equation for the basis elements $$\boldsymbol A^{k_1k_2}$$ looks complicated but it's actually pretty simple. $$\boldsymbol A^{k_1k_2}$$ is just the multiplication of two waves. One of them is traveling in the $$i$$ direction with a frequency related to $$k_1$$ and the other one is traveling in the $$j$$ direction with a frequency related to $$k_2$$.  
 
@@ -198,7 +198,7 @@ With 8x8 blocks (JPEG uses $$n=8$$) we get the following basis elements:
 </figure>
 
 
-Notice how you get the interior elements by multiplying one element from the first row and one element from the first column (and a multiplication by a constant because of the different alphas).
+Notice how you get the interior elements by multiplying one element from the first row and one element from the first column (and multiplication by a constant because of the different alphas).
 
 Anyway, after the cosine transform each value in the block is the coefficient of the related spatial frequency. 
 
@@ -212,22 +212,22 @@ Anyway, after the cosine transform each value in the block is the coefficient of
 </figure>
 
 Now we do *quantization*. Basically, we transform each coefficient from real numbers to integers. In the quantization step the real line is split into pieces of the same length and then an integer is assigned to each one. If a number falls in a range with assigned integer $$x$$ then it is quantized to $$x$$. As this is true for any number that falls within the same range, you can't recover the original value you had before the quantization.  Of course, the smaller the pieces, the higher the precision that we get.   
-The trick is that in real images the higher frequencies tend to have close to zero coefficients so they dont contribute much to the image <sup>[6](#high-frequency-effects)</sup>. Besides, our eyes don't pay much attention to these subtle higher frequencies effects anyway . With that in mind, we can use less precision when storing those coefficients. In more formal terms, our quantization does the following: given block $$\boldsymbol B$$ and quantization table $$\boldsymbol Q$$:
+The trick is that in real images the higher frequencies tend to have close to zero coefficients so they don't contribute much to the image <sup>[6](#high-frequency-effects)</sup>. Besides, our eyes don't pay much attention to these subtle higher frequencies effects anyway. With that in mind, we can use less precision when storing those coefficients. In more formal terms, our quantization does the following: given block $$\boldsymbol B$$ and quantization table $$\boldsymbol Q$$:
 
 $$ (\text{quantized } \boldsymbol B)_{ij} = \text{round} \left( \frac{\boldsymbol B_{ij} }{\boldsymbol Q_{ij}} \right) $$
 
 We just need to use larger values in the higher frequency entries of $$\boldsymbol Q$$ and we are done. 
 
-The mechanism by which one comes up with the exact values to use in the quantization table $$\boldsymbol Q$$ is way beyond my understanding. There seems to be a lot of [different tables](https://www.impulseadventure.com/photo/jpeg-quantization.html). In the end, (I think) these tables are just trying to put numbers on the way humans see images . Also, different tables are used for the luminance and chrominance channels. As we have said before, we don't see color all that well so we can use bigger quantization for high frequency coefficients in the chrominance channels.
-Another feature is that quantization tables can be multiplied by a constant so as to control the quantization precision. For instance, if we multiply the tables by $$0.5$$ we would halve the pieces lengths and preserve a higher level of detail.
+The mechanism by which one comes up with the exact values to use in the quantization table $$\boldsymbol Q$$ is way beyond my understanding. There seems to be a lot of [different tables](https://www.impulseadventure.com/photo/jpeg-quantization.html). In the end, (I think) these tables are just trying to put numbers on the way humans see images. Also, different tables are used for the luminance and chrominance channels. As we have said before, we don't see color all that well so we can use bigger quantization for high-frequency coefficients in the chrominance channels.
+Another feature is that quantization tables can be multiplied by a constant so as to control the quantization precision. For instance, if we multiply the tables by $$0.5$$ we would halve the piece's lengths and preserve a higher level of detail.
 
 
 
-The quantization step, done after the cosine transform, is responsible for most of the lossy compression and is the central part of the algorithm. Grouping values into the same integer is going to result in the most compression later when doing the loseless compression step. One can view the quantization as a form of clustering. Similar to the example of clustering colors, combining symbols reduces entropy so it will help when doing entropy encoding, specially considering that most high frequency coefficients are going to be zero after quantization. In addition to reducing entropy, sequences with large runs of the same symbol are great for performing run length encoding, as we will show next.
+The quantization step, done after the cosine transform, is responsible for most of the lossy compression and is the central part of the algorithm. Grouping values into the same integer is going to result in the most compression later when doing the lossless compression step. One can view the quantization as a form of clustering. Similar to the example of clustering colors, combining symbols reduces entropy so it will help when doing entropy encoding, specially considering that most high-frequency coefficients are going to be zero after quantization. In addition to reducing entropy, sequences with large runs of the same symbol are great for performing run-length encoding, as we will show next.
 
 ### The JPEG algorithm. Run length and Huffman encoding
 
-The last step of the algorithm is the lossless compression step. First let's talk about run length encoding. Run length encoding transforms a sequence of symbols into a sequence of (symbol, count) pairs. The count indicates the amount of consecutive appearances. It's easier with an example:
+The last step of the algorithm is the lossless compression step. First, let's talk about run length encoding. Run length encoding transforms a sequence of symbols into a sequence of (symbol, count) pairs. The count indicates the amount of consecutive appearances. It's easier with an example:
 
 $$AAABBCAA \xrightarrow{\text{run length code}} (A3)(B2)(C1)(A2) 
 $$
@@ -267,7 +267,7 @@ We have all that we need. To summarize everything we've done in our slightly off
 7. Huffman encode the symbol components of the run length codes
 
 
-Again, there's still a lot of low level stuff involved in the implementation. Look at the repo for more details about how this is done.   
+Again, there's still a lot of low-level stuff involved in the implementation. Look at the repo for more details about how this is done.   
 
 Now that we have our custom JPEG, we can test how well it works. We sample images from picsum and look at the bits per pixel used. There's also the quantization table multiplier that we can play with. Smaller multipliers lead to less compression but a greater similarity to the original image. So, sampling 700 images for a couple of quantization multipliers, we get the following:
 
