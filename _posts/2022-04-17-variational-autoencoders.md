@@ -2,6 +2,8 @@
 layout:     post
 title:      Variational Autoencoders Notes
 date:       2022-04-17
+redirect_from:
+  - /2022/04/17/variational-autoencoders/
 summary:    Me trying to understand how Variational Autoencoders work and some related notes
 mermaid: true
 update_date:  2022-08-05

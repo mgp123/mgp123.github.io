@@ -2,6 +2,8 @@
 layout:     post
 title:      Information Theory Notes
 date:       2021-10-05
+redirect_from:
+  - /2021/10/05/information-theory-notes/
 update_date:  2022-03-01
 update_summary: Added section on KL-divergence
 mermaid: true

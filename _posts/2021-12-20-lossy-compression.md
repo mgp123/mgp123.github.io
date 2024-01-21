@@ -2,6 +2,8 @@
 layout:     post
 title:      Lossy compression and implementing JPEG (kinda)
 date:       2021-12-20
+redirect_from:
+  - /2021/12/20/lossy-compression/
 mermaid: true
 summary: Trying to implement some basic algorithms for lossy compression of images. Also, a cool interpretation using linear algebra. 
 ---

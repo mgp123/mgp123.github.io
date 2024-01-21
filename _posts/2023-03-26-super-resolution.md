@@ -2,6 +2,8 @@
 layout:     post
 title:      Some pondering about super-resolution 
 date:       2023-03-26
+redirect_from:
+  - /2023/03/26/super-resolution/
 mermaid: true
 summary: A brief theoretical discussion about super-resolution using a Markov chain.
 

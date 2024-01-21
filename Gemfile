@@ -5,3 +5,4 @@ source 'https://rubygems.org'
 # https://github.com/github/pages-gem
 gem 'github-pages'
 gem 'jekyll-sitemap'
+gem 'jekyll-redirect-from'

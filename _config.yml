@@ -7,6 +7,7 @@ url:         "mgp123.github.io"
 date_format: "%b %-d, %Y"
 
 
+
 # Google services
 google_verification: k8_GcQ3XSGKZ7zpxZTzjo0yQHsrXPfZZC4PYrf_PFHA
 # Use either direct GA implementation or set up GTM account
@@ -101,13 +102,15 @@ text:
 markdown:     kramdown
 redcarpet:
   extensions: ['smart', 'tables', 'with_toc_data']
-permalink:    pretty
+permalink: /posts/:title/
+
 paginate:   10  
 sass:
   style: compressed
 plugins:
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-redirect-from
 # https://github.com/jekyll/jekyll/issues/2938
 exclude:
   - Gemfile

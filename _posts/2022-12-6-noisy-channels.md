@@ -2,6 +2,8 @@
 layout:     post
 title:      Noisy communication channels notes
 date:       2022-12-06
+redirect_from:
+  - /2022/12/06/noisy-channels/
 mermaid: true
 summary: How do you communicate when your messages might be changed on the way there? Some more notes on information theory.
 
@@ -13,6 +15,9 @@ thumbnail:  /images/noisy-channels/thumbnail.jpg
 ----
 
 
+<!-- <figure align="center">
+  <img  src="/images/distortion-theory/scientist.png" width=512/>
+</figure> -->
 
 ### An unreliable channel
 Imagine we need to send a large sequence of messages to someone using a channel to communicate. This channel, because of how it operates, can only transmit symbols from a fixed set that it can handle. This set of symbols can take many forms: it might be the set of real numbers, or it might be as simple as a binary channel which can only send 0s and 1s.
