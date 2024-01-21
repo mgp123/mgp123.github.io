@@ -8,7 +8,7 @@ summary:    Me trying to understand how Variational Autoencoders work and some r
 mermaid: true
 update_date:  2022-08-05
 update_summary: Made some corrections regarding the final distribution
-thumbnail: images/vae/thumbnail.png
+thumbnail: images/vae/thumbnail.jpg
 thumbnail_twitter:  images/vae/thumbnail_twitter.jpg
 ---
 

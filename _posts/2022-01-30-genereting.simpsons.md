@@ -6,7 +6,7 @@ redirect_from:
   - /2022/01/30/genereting.simpsons/
 summary:    Using StyleGAN2-ADA to generate images from The Simpsons (with low-quality results)
 thumbnail: images/simpsons/thumbnail.png
-thumbnail_twitter:  images/simpsons/thumbnail_twitter.jpg
+thumbnail_twitter:  images/simpsons/thumbnail_twitter.png
 ---
 <span style="font-size:0.8em;">I'm not an expert on the topic. May contain errors!</span>
 

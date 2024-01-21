@@ -9,7 +9,7 @@ update_summary: Added section on KL-divergence
 mermaid: true
 summary:    A brief recap of the main results of communication in noiseless channels based on my notes.
 thumbnail: images/information-theory/thumbnail.png
-thumbnail_twitter:  images/information-theory/thumbnail_twitter.jpg 
+thumbnail_twitter:  images/information-theory/thumbnail_twitter.png 
 header-includes: 
   - \usepackage{tikz}
   - \usepackage{pgfplots}
