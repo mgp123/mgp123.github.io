@@ -3,7 +3,7 @@ title: Blog posts
 author:      Matias Grynberg Portnoy
 description: "Some interesting stuff I've been doing"
 baseurl:     ""
-url:         "mgp123.github.io"
+url:         "https://mgp123.github.io"
 date_format: "%b %-d, %Y"
 
 
