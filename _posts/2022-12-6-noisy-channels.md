@@ -7,6 +7,7 @@ redirect_from:
 mermaid: true
 summary: How do you communicate when your messages might be changed on the way there? Some more notes on information theory.
 thumbnail:  images/noisy-channels/thumbnail.jpg
+thumbnail_twitter:  images/noisy-channels/thumbnail_twitter.jpg
 ---
 
 <span style="font-size:0.8em;">This is mostly a combination of notes and ideas from Elements of Information Theory by Cover and Thomas. May contain errors!</span>

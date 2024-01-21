@@ -8,6 +8,8 @@ update_date:  2022-03-01
 update_summary: Added section on KL-divergence
 mermaid: true
 summary:    A brief recap of the main results of communication in noiseless channels based on my notes.
+thumbnail: images/information-theory/thumbnail.png
+thumbnail_twitter:  images/information-theory/thumbnail_twitter.jpg 
 header-includes: 
   - \usepackage{tikz}
   - \usepackage{pgfplots}

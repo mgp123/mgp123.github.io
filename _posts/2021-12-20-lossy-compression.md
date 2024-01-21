@@ -5,7 +5,9 @@ date:       2021-12-20
 redirect_from:
   - /2021/12/20/lossy-compression/
 mermaid: true
-summary: Trying to implement some basic algorithms for lossy compression of images. Also, a cool interpretation using linear algebra. 
+summary: Trying to implement some basic algorithms for lossy compression of images. Also, a cool interpretation using linear algebra.
+thumbnail: images/lossy-compression/thumbnail.png
+thumbnail_twitter:  images/lossy-compression/thumbnail_twitter.jpg 
 ---
 
 <span style="font-size:0.8em;">I'm not an expert in the topic. May contain errors!</span>

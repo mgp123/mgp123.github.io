@@ -71,7 +71,11 @@
     
     {% if page.thumbnail %}
     <meta property="og:image" itemprop="image" content="{{ site.url }}/{{ page.thumbnail }}">
+    {% if page.thumbnail_twitter %}
+    <meta name="twitter:image" content="{{ site.url }}/{{ page.thumbnail_twitter }}" />
+    {% else %}
     <meta name="twitter:image" content="{{ site.url }}/{{ page.thumbnail }}" />
+    {% endif %}
     {% endif %}
 
     <!-- Twitter Card -->
