@@ -6,8 +6,8 @@ redirect_from:
   - /2022/04/17/variational-autoencoders/
 summary:    Me trying to understand how Variational Autoencoders work and some related notes
 mermaid: true
-update_date:  2022-08-05
-update_summary: Made some corrections regarding the final distribution
+update_date:  2025-01-05
+update_summary: Looking back at this post, I used a particular way to derive the ELBO that was not the best. It would have been more straightforward to use Jensen's inequality as most derivations do instead of the one I was following.
 thumbnail: images/vae/thumbnail.jpg
 thumbnail_twitter:  images/vae/thumbnail_twitter.jpg
 ---
