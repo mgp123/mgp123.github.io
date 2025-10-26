@@ -6,6 +6,12 @@ baseurl:     ""
 url:         "https://mgp123.github.io"
 date_format: "%b %-d, %Y"
 
+# Order of header navigation. Add any page paths you want to show in the top nav
+# Paths should match the page `path` (for example: "index.html", "about.md").
+header_pages:
+  - "index.html"
+  - "about.md"
+
 
 
 # Google services

@@ -1,8 +1,21 @@
 <header class="site-header px2 px-responsive">
   <div class="mt2 wrap">
     <div class="measure">
-      <a href="{{ "/" | relative_url }}" class="site-title">{{ site.title }}</a>
+      
+      <style>
+      /* add spacing between two adjacent .site-title links */
+      .site-header .site-title { display: inline-block; }
+      .site-header .site-title + .site-title { margin-left: 0.75rem; }
+      </style>
+      <div class="mt2">
+        <a href="{{ "/" | relative_url }}" class="site-title">{{ site.title }}</a>
+        <a href="{{ "/about" | relative_url }}" class="site-title"> Me</a>
+
+      </div>
+
+
       <p class="site-author">  {{ site.author }}</p>
+
       <!-- <nav class="site-nav">
         {% include navigation.html %}
       </nav> -->
@@ -11,5 +24,6 @@
         {% include social_links.html %}
       {% endif %}
     </div>
+
   </div>
 </header>

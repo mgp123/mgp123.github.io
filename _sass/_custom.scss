@@ -9,3 +9,49 @@
   border: 1px solid red;
   padding: 20px;
 }
+
+.paper-card {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.paper-card-image {
+  width: 300px;
+  height: auto;
+  border-radius: 4px;
+  margin-right: 1rem;
+}
+
+.paper-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.paper-title {
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0 0 0.5rem;
+  // different font
+  font-family: 'Arial', sans-serif;
+}
+
+.paper-authors {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 0 0 0.25rem;
+}
+
+.paper-conference {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.paper-links {
+  font-size: 0.6rem;
+}
